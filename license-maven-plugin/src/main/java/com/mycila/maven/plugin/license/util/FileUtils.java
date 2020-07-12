@@ -57,7 +57,7 @@ public final class FileUtils {
     return new BufferedReader(new InputStreamReader(url.openStream(), encoding));
   }
 
-  public static String read(URL location, Charset encoding, Map<String, Object> properties) throws IOException, URISyntaxException {
+  public static String read(URL location, Charset encoding, Map<String, String> properties) throws IOException, URISyntaxException {
     try (Reader reader = new InterpolationFilterReader(urlToReader(location, encoding), properties)) {
       return IOUtils.toString(reader);
     }
@@ -79,9 +79,9 @@ public final class FileUtils {
 
   @SuppressWarnings("resource")
   public static String read(File file, Charset encoding) throws IOException {
-    try (FileChannel in = new FileInputStream(file).getChannel()) {
+    try (FileChannel inputChannel = new FileInputStream(file).getChannel()) {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      in.transferTo(0, in.size(), Channels.newChannel(baos));
+      inputChannel.transferTo(0, inputChannel.size(), Channels.newChannel(baos));
       return baos.toString(encoding.name());
     }
   }
@@ -108,9 +108,9 @@ public final class FileUtils {
   @SuppressWarnings("resource")
   public static void copyFileToFolder(File file, File folder) throws IOException {
     File dest = new File(folder, file.getName());
-    try (FileChannel inChannel = new FileInputStream(file).getChannel();
-         FileChannel outChannel = new FileOutputStream(dest).getChannel()) {
-      inChannel.transferTo(0, inChannel.size(), outChannel);
+    try (FileChannel inputChannel = new FileInputStream(file).getChannel();
+         FileChannel outputChannel = new FileOutputStream(dest).getChannel()) {
+      inputChannel.transferTo(0, inputChannel.size(), outputChannel);
     }
   }
 
