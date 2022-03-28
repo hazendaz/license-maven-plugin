@@ -484,7 +484,6 @@ public abstract class AbstractLicenseMojo extends AbstractMojo {
 
   }
 
-  @SuppressWarnings({"unchecked"})
   protected final void execute(final Callback callback) throws MojoExecutionException, MojoFailureException {
     if (!skip) {
 
