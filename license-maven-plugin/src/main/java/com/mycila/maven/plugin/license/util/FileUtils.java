@@ -122,7 +122,6 @@ public final class FileUtils {
     return file.toPath();
   }
 
-  @SuppressWarnings({"ConstantConditions", "ResultOfMethodCallIgnored"})
   public static void copyFilesToFolder(File src, File dst) {
     dst.mkdirs();
     Stream.of(src.listFiles()).filter(File::isFile).forEach(file -> {
