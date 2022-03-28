@@ -932,6 +932,7 @@ public abstract class AbstractLicenseMojo extends AbstractMojo {
     if (str == null) {
       return null;
     }
+    // We do really want to replace all here
     return str.replaceAll(".", "*");
   }
 
