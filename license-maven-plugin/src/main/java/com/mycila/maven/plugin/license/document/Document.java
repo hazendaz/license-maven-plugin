@@ -15,19 +15,18 @@
  */
 package com.mycila.maven.plugin.license.document;
 
+import static com.mycila.maven.plugin.license.util.FileUtils.readFirstLines;
+import static com.mycila.maven.plugin.license.util.FileUtils.remove;
+
 import com.mycila.maven.plugin.license.header.Header;
 import com.mycila.maven.plugin.license.header.HeaderDefinition;
 import com.mycila.maven.plugin.license.header.HeaderParser;
 import com.mycila.maven.plugin.license.header.HeaderType;
 import com.mycila.maven.plugin.license.util.FileContent;
 import com.mycila.maven.plugin.license.util.FileUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-
-import static com.mycila.maven.plugin.license.util.FileUtils.readFirstLines;
-import static com.mycila.maven.plugin.license.util.FileUtils.remove;
 
 public final class Document {
   private final File file;

@@ -15,7 +15,16 @@
  */
 package com.mycila.maven.plugin.license;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import com.mycila.maven.plugin.license.util.FileUtils;
+import java.io.File;
+import java.nio.charset.Charset;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.testing.stubs.ArtifactStub;
@@ -23,16 +32,6 @@ import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.File;
-import java.nio.charset.Charset;
-import java.time.Clock;
-import java.time.Instant;
-import java.time.ZoneId;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 class ReportTest {
 
