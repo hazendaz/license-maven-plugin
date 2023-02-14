@@ -18,14 +18,13 @@ package com.mycila.maven.plugin.license.header;
 import com.mycila.maven.plugin.license.HeaderSection;
 import com.mycila.maven.plugin.license.header.HeaderSource.UrlHeaderSource;
 import com.mycila.maven.plugin.license.util.FileUtils;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 class HeaderTest {
   @Test

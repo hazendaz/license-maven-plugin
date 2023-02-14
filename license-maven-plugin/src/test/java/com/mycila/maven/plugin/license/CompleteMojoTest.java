@@ -15,25 +15,6 @@
  */
 package com.mycila.maven.plugin.license;
 
-import com.mycila.maven.plugin.license.header.HeaderType;
-import com.mycila.maven.plugin.license.util.FileUtils;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.stream.Stream;
-
 import static com.mycila.maven.plugin.license.header.HeaderType.APOSTROPHE_STYLE;
 import static com.mycila.maven.plugin.license.header.HeaderType.ASCIIDOC_STYLE;
 import static com.mycila.maven.plugin.license.header.HeaderType.ASP;
@@ -74,6 +55,24 @@ import static java.util.EnumSet.copyOf;
 import static java.util.stream.Collectors.toList;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import com.mycila.maven.plugin.license.header.HeaderType;
+import com.mycila.maven.plugin.license.util.FileUtils;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.stream.Stream;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class CompleteMojoTest {
 

@@ -21,6 +21,7 @@ import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.Map;
+import org.codehaus.plexus.util.FileUtils;
 
 public final class DocumentFactory {
   private final Map<String, String> mapping;
