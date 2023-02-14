@@ -15,17 +15,16 @@
  */
 package com.mycila.maven.plugin.license.fs;
 
+import static java.time.ZoneOffset.UTC;
+
 import com.mycila.maven.plugin.license.AbstractLicenseMojo;
 import com.mycila.maven.plugin.license.PropertiesProvider;
 import com.mycila.maven.plugin.license.document.Document;
-
 import java.io.File;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import static java.time.ZoneOffset.UTC;
 
 /**
  * An implementation of {@link PropertiesProvider} that adds {@value #COPYRIGHT_LAST_YEAR_KEY} and
