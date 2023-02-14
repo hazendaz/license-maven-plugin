@@ -15,11 +15,11 @@
  */
 package com.mycila.maven.plugin.license.util;
 
+import static com.mycila.maven.plugin.license.util.FileUtils.read;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-
-import static com.mycila.maven.plugin.license.util.FileUtils.read;
 
 public final class FileContent {
   private final File file;

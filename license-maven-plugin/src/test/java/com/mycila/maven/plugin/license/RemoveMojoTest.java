@@ -17,14 +17,13 @@ package com.mycila.maven.plugin.license;
 
 import com.google.common.io.Files;
 import com.mycila.maven.plugin.license.util.FileUtils;
-import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 final class RemoveMojoTest {
   public static final String LS = "\n";

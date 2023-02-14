@@ -15,8 +15,7 @@
  */
 package com.mycila.maven.plugin.license.util;
 
-import org.apache.commons.io.IOUtils;
-import org.codehaus.plexus.util.InterpolationFilterReader;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -37,8 +36,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.stream.Stream;
-
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import org.apache.commons.io.IOUtils;
+import org.codehaus.plexus.util.InterpolationFilterReader;
 
 public final class FileUtils {
 

@@ -17,11 +17,6 @@ package com.mycila.maven.plugin.license.fs;
 
 import com.mycila.maven.plugin.license.LicenseCheckMojo;
 import com.mycila.maven.plugin.license.document.Document;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -31,6 +26,10 @@ import java.nio.file.attribute.FileTime;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 class CopyrightRangeProviderTest {
   private static Path fsRepoRoot;
