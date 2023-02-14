@@ -16,11 +16,10 @@
 package com.mycila.maven.plugin.license;
 
 import com.mycila.maven.plugin.license.util.FileUtils;
-import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
-import org.junit.jupiter.api.Test;
-
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
+import org.junit.jupiter.api.Test;
 
 class HeaderMojoTest {
 

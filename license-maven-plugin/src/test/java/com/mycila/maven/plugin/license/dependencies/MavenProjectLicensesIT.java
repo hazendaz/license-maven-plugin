@@ -17,12 +17,11 @@ package com.mycila.maven.plugin.license.dependencies;
 
 import static com.soebes.itf.extension.assertj.MavenITAssertions.assertThat;
 
-import org.junit.jupiter.api.DisplayName;
-
 import com.soebes.itf.jupiter.extension.MavenGoal;
 import com.soebes.itf.jupiter.extension.MavenJupiterExtension;
 import com.soebes.itf.jupiter.extension.MavenTest;
 import com.soebes.itf.jupiter.maven.MavenExecutionResult;
+import org.junit.jupiter.api.DisplayName;
 
 /**
  * The <a href="https://khmarbaise.github.io/maven-it-extension/itf-documentation/usersguide/usersguide.html">Maven Integration Testing Framework</a>

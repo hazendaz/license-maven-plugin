@@ -16,13 +16,11 @@
 package com.mycila.maven.plugin.license.header;
 
 import com.mycila.maven.plugin.license.util.FileContent;
-
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

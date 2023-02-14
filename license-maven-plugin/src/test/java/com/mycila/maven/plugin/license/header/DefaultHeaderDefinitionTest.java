@@ -15,16 +15,16 @@
  */
 package com.mycila.maven.plugin.license.header;
 
+import static java.lang.String.format;
+
 import com.mycila.maven.plugin.license.header.HeaderSource.UrlHeaderSource;
 import com.mycila.maven.plugin.license.util.FileUtils;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-import static java.lang.String.format;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 class DefaultHeaderDefinitionTest {
   @Test
