@@ -16,11 +16,10 @@
 package com.mycila.maven.plugin.license.document;
 
 import com.mycila.maven.plugin.license.header.HeaderDefinition;
-import org.codehaus.plexus.util.FileUtils;
-
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.Map;
+import org.codehaus.plexus.util.FileUtils;
 
 public final class DocumentFactory {
   private final Map<String, String> mapping;
