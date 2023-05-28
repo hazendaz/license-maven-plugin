@@ -21,14 +21,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java }}
           distribution: ${{ matrix.distribution }}
       - name: Test with Maven
         run: ./mvnw clean install site -V -B -D"maven.artifact.threads=64" -D"org.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
       - name: Set up JDK 8 Integration Run (Consumer Run)
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: 8
           distribution: ${{ matrix.distribution }}
