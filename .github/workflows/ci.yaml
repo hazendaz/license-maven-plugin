@@ -5,7 +5,7 @@ on:
   pull_request:
   push:
     branches:
-      - master
+      - maven-work
 jobs:
   test:
     runs-on: ${{ matrix.os }}
