@@ -72,7 +72,7 @@ public class GitLookup implements AutoCloseable {
   private final int checkCommitsCount;
   private final DateSource dateSource;
   private final GitPathResolver pathResolver;
-  private final Repository repository;
+  private Repository repository;
   private final TimeZone timeZone;
   private final boolean shallow;
   private final Set<ObjectId> commitsToIgnore;
@@ -140,7 +140,10 @@ public class GitLookup implements AutoCloseable {
     requireNonNull(commitsToIgnore);
 
     try {
-      this.repository = new FileRepositoryBuilder().findGitDir(anyFile).build();
+      // Reuse repository closing when gitLookup is closed
+      if (this.repository == null) {
+          this.repository = new FileRepositoryBuilder().findGitDir(anyFile).build();
+      }
       /* A workaround for  https://bugs.eclipse.org/bugs/show_bug.cgi?id=457961 */
       // Also contains contents of .git/shallow and can detect shallow repo
       // the line below reads and caches the entries in the FileObjectDatabase of the repository to
