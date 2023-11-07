@@ -89,50 +89,78 @@ class GitLookupTest {
 
   @Test
   void modified() throws GitAPIException, IOException {
-    assertLastChange(newAuthorLookup(), "dir1/file1.txt", 2006);
-    assertLastChange(newCommitterLookup(), "dir1/file1.txt", 2006);
+    GitLookup authorProvider = newAuthorLookup();
+    GitLookup committerProvider = newCommitterLookup();
 
-    assertCreation(newAuthorLookup(), "dir1/file1.txt", 2000);
-    assertCreation(newCommitterLookup(), "dir1/file1.txt", 2000);
+    assertLastChange(authorProvider, "dir1/file1.txt", 2006);
+    assertLastChange(committerProvider, "dir1/file1.txt", 2006);
+
+    assertCreation(authorProvider, "dir1/file1.txt", 2000);
+    assertCreation(committerProvider, "dir1/file1.txt", 2000);
+
+    authorProvider.close();
   }
 
   @Test
   void justCreated() throws GitAPIException, IOException {
-    assertLastChange(newAuthorLookup(), "dir2/file2.txt", 2007);
-    assertLastChange(newCommitterLookup(), "dir2/file2.txt", 2007);
+    GitLookup authorProvider = newAuthorLookup();
+    GitLookup committerProvider = newCommitterLookup();
 
-    assertCreation(newAuthorLookup(), "dir2/file2.txt", 2007);
-    assertCreation(newCommitterLookup(), "dir2/file2.txt", 2007);
+    assertLastChange(authorProvider, "dir2/file2.txt", 2007);
+    assertLastChange(committerProvider, "dir2/file2.txt", 2007);
+
+    assertCreation(authorProvider, "dir2/file2.txt", 2007);
+    assertCreation(committerProvider, "dir2/file2.txt", 2007);
+
+    authorProvider.close();
   }
 
   @Test
   void moved() throws GitAPIException, IOException {
-    assertLastChange(newAuthorLookup(), "dir1/file3.txt", 2009);
-    assertLastChange(newCommitterLookup(), "dir1/file3.txt", 2010);
+    GitLookup authorProvider = newAuthorLookup();
+    GitLookup committerProvider = newCommitterLookup();
+
+    assertLastChange(authorProvider, "dir1/file3.txt", 2009);
+    assertLastChange(committerProvider, "dir1/file3.txt", 2010);
 
     // In this case the file moved and its creation data could not be tracked
-    assertCreation(newAuthorLookup(), "dir1/file3.txt", 2009);
-    assertCreation(newCommitterLookup(), "dir1/file3.txt", 2010);
+    assertCreation(authorProvider, "dir1/file3.txt", 2009);
+    assertCreation(committerProvider, "dir1/file3.txt", 2010);
+
+    authorProvider.close();
+    committerProvider.close();
   }
 
   @Test
   void newUnstaged() throws GitAPIException, IOException {
     int currentYear = getCurrentGmtYear();
-    assertLastChange(newAuthorLookup(), "dir1/file5.txt", currentYear);
-    assertLastChange(newCommitterLookup(), "dir1/file5.txt", currentYear);
+    GitLookup authorProvider = newAuthorLookup();
+    GitLookup committerProvider = newCommitterLookup();
 
-    assertCreation(newAuthorLookup(), "dir1/file5.txt", currentYear);
-    assertCreation(newCommitterLookup(), "dir1/file5.txt", currentYear);
+    assertLastChange(authorProvider, "dir1/file5.txt", currentYear);
+    assertLastChange(committerProvider, "dir1/file5.txt", currentYear);
+
+    assertCreation(authorProvider, "dir1/file5.txt", currentYear);
+    assertCreation(committerProvider, "dir1/file5.txt", currentYear);
+
+    authorProvider.close();
+    committerProvider.close();
   }
 
   @Test
   void newStaged() throws GitAPIException, IOException {
     int currentYear = getCurrentGmtYear();
-    assertLastChange(newAuthorLookup(), "dir1/file6.txt", currentYear);
-    assertLastChange(newCommitterLookup(), "dir1/file6.txt", currentYear);
+    GitLookup authorProvider = newAuthorLookup();
+    GitLookup committerProvider = newCommitterLookup();
 
-    assertCreation(newAuthorLookup(), "dir1/file6.txt", currentYear);
-    assertCreation(newCommitterLookup(), "dir1/file6.txt", currentYear);
+    assertLastChange(authorProvider, "dir1/file6.txt", currentYear);
+    assertLastChange(committerProvider, "dir1/file6.txt", currentYear);
+
+    assertCreation(authorProvider, "dir1/file6.txt", currentYear);
+    assertCreation(committerProvider, "dir1/file6.txt", currentYear);
+
+    authorProvider.close();
+    committerProvider.close();
   }
 
   /**
@@ -150,6 +178,7 @@ class GitLookupTest {
     assertLastChange(provider, "dir1/file1.txt", 2006);
     assertLastChange(provider, "dir2/file2.txt", 2007);
     assertLastChange(provider, "dir1/file3.txt", 2009);
+    provider.close();
   }
 
   @Test
@@ -162,11 +191,13 @@ class GitLookupTest {
     GitLookup nullTzLookup = GitLookup.create(gitRepoRoot.toFile(),
         buildProps(DateSource.COMMITER, null, "10", null));
     assertLastChange(nullTzLookup, "dir1/file3.txt", 2010);
+    nullTzLookup.close();
 
     /* explicit GMT */
     GitLookup gmtLookup = GitLookup.create(gitRepoRoot.toFile(),
         buildProps(DateSource.COMMITER, "GMT", "10", null));
     assertLastChange(gmtLookup, "dir1/file3.txt", 2010);
+    gmtLookup.close();
 
     /*
      * explicit non-GMT zome. Note that the relevant commit's (GMT) time stamp is 2010-12-31T23:30:00 which yealds
@@ -175,6 +206,7 @@ class GitLookupTest {
     GitLookup cetLookup = GitLookup.create(gitRepoRoot.toFile(),
         buildProps(DateSource.COMMITER, "CET", "10", null));
     assertLastChange(cetLookup, "dir1/file3.txt", 2011);
+    cetLookup.close();
 
   }
 
@@ -195,24 +227,36 @@ class GitLookupTest {
     return props;
   }
 
+  // Make sure to close after call
   private GitLookup newAuthorLookup() {
     return GitLookup.create(gitRepoRoot.toFile(), buildProps(DateSource.AUTHOR, null, "10", null));
   }
 
+  // Make sure to close after call
   private GitLookup newCommitterLookup() {
     return GitLookup.create(gitRepoRoot.toFile(), buildProps(DateSource.COMMITER, null, "10", null));
   }
 
   @Test
   void ignoreCommitsInLastChange() throws GitAPIException, IOException {
-    assertLastChange(newAuthorLookup("95d52919cbe340dc271cf1f5ec68cf36705bd3a3"), "dir1/file1.txt", 2004);
+    GitLookup authorProvider = newAuthorLookup("95d52919cbe340dc271cf1f5ec68cf36705bd3a3");
+
+    assertLastChange(authorProvider, "dir1/file1.txt", 2004);
     assertLastChange(newCommitterLookup("95d52919cbe340dc271cf1f5ec68cf36705bd3a3"), "dir1/file1.txt", 2004);
+
+    authorProvider.close();
   }
 
   @Test
   void doNotIgnoreCommitsInCreation() throws GitAPIException, IOException {
-    assertCreation(newAuthorLookup("53b44baedc5a378f9b665da12f298e1003793219"), "dir1/file1.txt", 2000);
-    assertCreation(newCommitterLookup("53b44baedc5a378f9b665da12f298e1003793219"), "dir1/file1.txt", 2000);
+    GitLookup authorProvider = newAuthorLookup("53b44baedc5a378f9b665da12f298e1003793219");
+    GitLookup committerProvider = newCommitterLookup("53b44baedc5a378f9b665da12f298e1003793219");
+
+    assertCreation(authorProvider, "dir1/file1.txt", 2000);
+    assertCreation(committerProvider, "dir1/file1.txt", 2000);
+
+    authorProvider.close();
+    committerProvider.close();
   }
 
   private GitLookup newAuthorLookup(String... commitsToIgnore) throws IOException {
