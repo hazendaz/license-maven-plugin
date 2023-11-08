@@ -534,23 +534,23 @@ public abstract class AbstractLicenseMojo extends AbstractMojo {
       return;
     }
 
+    if (!strictCheck) {
+        warn("Property 'strictCheck' is not enabled. Please consider adding <strictCheck>true</strictCheck> in your pom.xml file.");
+        warn("See https://mathieu.carbou.me/license-maven-plugin for more information.");
+      }
+
     // need to perform validation first
+    LicenseSet licenseSet;
     for (int i = 0; i < licenseSets.length; i++) {
-      final LicenseSet licenseSet = licenseSets[i];
+      licenseSet = licenseSets[i];
       if (!hasHeader(licenseSet)) {
         warn("No header file specified to check for license in licenseSet: " + i);
         return;
       }
       // make licenseSet baseDir canonical
       licenseSet.basedir = this.getCanonicalFile(licenseSet.basedir, "licenseSet[" + i + "].basedir");
-    }
-    if (!strictCheck) {
-      warn("Property 'strictCheck' is not enabled. Please consider adding <strictCheck>true</strictCheck> in your pom.xml file.");
-      warn("See https://mathieu.carbou.me/license-maven-plugin for more information.");
-    }
 
-    // then execute each license set
-    for (final LicenseSet licenseSet : licenseSets) {
+      // then execute each license set
       executeForLicenseSet(licenseSet, callback);
     }
   }
@@ -600,8 +600,9 @@ public abstract class AbstractLicenseMojo extends AbstractMojo {
       licenseSet.validHeaders = new String[0];
     }
     final List<Header> validHeaders = new ArrayList<>(licenseSet.validHeaders.length);
+    HeaderSource validHeaderSource;
     for (final String validHeader : licenseSet.validHeaders) {
-      final HeaderSource validHeaderSource = HeaderSource.of(null, null, validHeader, Charset.forName(this.encoding),
+      validHeaderSource = HeaderSource.of(null, null, validHeader, Charset.forName(this.encoding),
           finder);
       validHeaders.add(new Header(validHeaderSource, licenseSet.headerSections));
     }
@@ -644,10 +645,10 @@ public abstract class AbstractLicenseMojo extends AbstractMojo {
 
         Map<String, String> readOnly = Collections.unmodifiableMap(perDoc);
 
+        Map<String, String> adjustments;
         for (final PropertiesProvider provider : propertiesProviders) {
           try {
-            final Map<String, String> adjustments = provider.adjustProperties(
-                AbstractLicenseMojo.this, readOnly, document);
+            adjustments = provider.adjustProperties(AbstractLicenseMojo.this, readOnly, document);
             if (getLog().isDebugEnabled()) {
               getLog().debug("provider: " + provider.getClass() + " adjusted these properties:\n"
                   + adjustments);
