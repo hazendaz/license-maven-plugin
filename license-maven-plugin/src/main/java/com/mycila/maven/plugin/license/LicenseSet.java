@@ -21,6 +21,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The Class LicenseSet.
+ */
 public class LicenseSet {
 
   /**

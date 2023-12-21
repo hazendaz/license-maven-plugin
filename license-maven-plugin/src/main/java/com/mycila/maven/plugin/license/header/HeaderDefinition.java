@@ -101,30 +101,65 @@ public final class HeaderDefinition {
     return regexp == null ? null : Pattern.compile(regexp);
   }
 
+  /**
+   * Gets the first line.
+   *
+   * @return the first line
+   */
   public String getFirstLine() {
     return firstLine;
   }
 
+  /**
+   * Gets the before each line.
+   *
+   * @return the before each line
+   */
   public String getBeforeEachLine() {
     return beforeEachLine;
   }
 
+  /**
+   * Gets the end line.
+   *
+   * @return the end line
+   */
   public String getEndLine() {
     return endLine;
   }
 
+  /**
+   * Gets the after each line.
+   *
+   * @return the after each line
+   */
   public String getAfterEachLine() {
     return afterEachLine;
   }
 
+  /**
+   * Gets the type.
+   *
+   * @return the type
+   */
   public String getType() {
     return type;
   }
 
+  /**
+   * Allow blank lines.
+   *
+   * @return true, if successful
+   */
   public boolean allowBlankLines() {
     return allowBlankLines;
   }
 
+  /**
+   * Checks if is pad lines.
+   *
+   * @return true, if is pad lines
+   */
   public boolean isPadLines() {
     return padLines;
   }
@@ -160,6 +195,11 @@ public final class HeaderDefinition {
     return lastLineDetectionPattern != null && line != null && lastLineDetectionPattern.matcher(line).matches();
   }
 
+  /**
+   * Gets the skip line pattern.
+   *
+   * @return the skip line pattern
+   */
   protected Pattern getSkipLinePattern() {
     return skipLinePattern;
   }
@@ -262,6 +302,11 @@ public final class HeaderDefinition {
     return type;
   }
 
+  /**
+   * Checks if is multi line.
+   *
+   * @return true, if is multi line
+   */
   public boolean isMultiLine() {
     return multiLine;
   }
