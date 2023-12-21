@@ -74,6 +74,8 @@ public class MavenProjectLicenses implements LicenseMap, LicenseMessage {
   }
 
   /**
+   * Instantiates a new maven project licenses.
+   *
    * @param session        the current {@link MavenSession}
    * @param project        the project {@link MavenProject}
    * @param graph          the {@link DependencyGraphBuilder} implementation
@@ -133,6 +135,8 @@ public class MavenProjectLicenses implements LicenseMap, LicenseMessage {
 
   /**
    * Return the Set of all direct and transitive Artifact dependencies.
+   *
+   * @return the dependencies
    */
   private Set<Artifact> getDependencies() {
     final Set<Artifact> artifacts = new HashSet<>();
@@ -165,6 +169,11 @@ public class MavenProjectLicenses implements LicenseMap, LicenseMessage {
     // return project.getArtifacts();
   }
 
+  /**
+   * Gets the projects.
+   *
+   * @return the projects
+   */
   protected Set<MavenProject> getProjects() {
     return projects;
   }
@@ -173,6 +182,11 @@ public class MavenProjectLicenses implements LicenseMap, LicenseMessage {
     this.session = session;
   }
 
+  /**
+   * Sets the projects.
+   *
+   * @param projects the new projects
+   */
   protected void setProjects(final Set<MavenProject> projects) {
     this.projects = Optional.ofNullable(projects).orElse(new HashSet<>());
   }

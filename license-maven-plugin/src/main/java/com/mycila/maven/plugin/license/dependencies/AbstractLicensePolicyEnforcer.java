@@ -21,12 +21,23 @@ package com.mycila.maven.plugin.license.dependencies;
  * @param <T> the generic license policy enforcer
  */
 public abstract class AbstractLicensePolicyEnforcer<T> implements LicensePolicyEnforcer<T> {
+
   private final LicensePolicy policy;
 
+  /**
+   * Instantiates a new abstract license policy enforcer.
+   *
+   * @param policy the policy
+   */
   protected AbstractLicensePolicyEnforcer(final LicensePolicy policy) {
     this.policy = policy;
   }
 
+  /**
+   * Gets the policy.
+   *
+   * @return the policy
+   */
   public LicensePolicy getPolicy() {
     return policy;
   }

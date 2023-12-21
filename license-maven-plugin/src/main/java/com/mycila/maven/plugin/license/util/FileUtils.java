@@ -50,6 +50,14 @@ public final class FileUtils {
     // Do not allow instantiation
   }
 
+  /**
+   * Write.
+   *
+   * @param file the file
+   * @param content the content
+   * @param encoding the encoding
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
   @SuppressWarnings("resource")
   public static void write(File file, String content, Charset encoding) throws IOException {
     try (FileChannel channel = new FileOutputStream(file).getChannel()) {
@@ -57,18 +65,46 @@ public final class FileUtils {
     }
   }
 
+  /**
+   * Read.
+   *
+   * @param location the location
+   * @param encoding the encoding
+   * @param properties the properties
+   * @return the string
+   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws URISyntaxException Signals that an uri syntax exception has occurred.
+   */
   public static String read(URL location, Charset encoding, Map<String, Object> properties) throws IOException, URISyntaxException {
     try (Reader reader = new InterpolationFilterReader(Files.newBufferedReader(Paths.get(location.toURI()), encoding), properties)) {
       return IOUtils.toString(reader);
     }
   }
 
+  /**
+   * Read.
+   *
+   * @param location the location
+   * @param encoding the encoding
+   * @return the string
+   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws URISyntaxException Signals that an uri syntax exception has occurred.
+   */
   public static String read(URL location, Charset encoding) throws IOException, URISyntaxException {
     try (Reader reader = Files.newBufferedReader(Paths.get(location.toURI()), encoding)) {
       return IOUtils.toString(reader);
     }
   }
 
+  /**
+   * Read.
+   *
+   * @param locations the locations
+   * @param encoding the encoding
+   * @return the string[]
+   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws URISyntaxException Signals that an uri syntax exception has occurred.
+   */
   public static String[] read(final URL[] locations, final Charset encoding) throws IOException, URISyntaxException {
     final String[] results = new String[locations.length];
     for (int i = 0; i < locations.length; i++) {
@@ -79,6 +115,14 @@ public final class FileUtils {
     return results;
   }
 
+  /**
+   * Read.
+   *
+   * @param file the file
+   * @param encoding the encoding
+   * @return the string
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
   @SuppressWarnings("resource")
   public static String read(File file, Charset encoding) throws IOException {
     try (FileChannel in = new FileInputStream(file).getChannel()) {
@@ -88,6 +132,15 @@ public final class FileUtils {
     }
   }
 
+  /**
+   * Read first lines.
+   *
+   * @param file the file
+   * @param lineCount the line count
+   * @param encoding the encoding
+   * @return the string
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
   public static String readFirstLines(File file, int lineCount, Charset encoding) throws IOException {
     try (BufferedReader reader = Files.newBufferedReader(file.toPath(), encoding)) {
       String line;
@@ -100,6 +153,13 @@ public final class FileUtils {
     }
   }
 
+  /**
+   * Removes the.
+   *
+   * @param str the str
+   * @param chars the chars
+   * @return the string
+   */
   public static String remove(String str, String... chars) {
     for (String s : chars) {
       str = str.replace(s, "");
@@ -107,6 +167,13 @@ public final class FileUtils {
     return str;
   }
 
+  /**
+   * Copy file to folder.
+   *
+   * @param file the file
+   * @param folder the folder
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
   @SuppressWarnings("resource")
   public static void copyFileToFolder(File file, File folder) throws IOException {
     File dest = new File(folder, file.getName());
@@ -116,6 +183,12 @@ public final class FileUtils {
     }
   }
 
+  /**
+   * As path.
+   *
+   * @param file the file
+   * @return the path
+   */
   public static Path asPath(final File file) {
     if (file == null) {
       return null;
@@ -124,6 +197,12 @@ public final class FileUtils {
     return file.toPath();
   }
 
+  /**
+   * Copy files to folder.
+   *
+   * @param src the src
+   * @param dst the dst
+   */
   @SuppressWarnings({"ConstantConditions", "ResultOfMethodCallIgnored"})
   public static void copyFilesToFolder(File src, File dst) {
     dst.mkdirs();
