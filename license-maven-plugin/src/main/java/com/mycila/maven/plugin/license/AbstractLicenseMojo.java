@@ -83,8 +83,10 @@ import static java.util.Arrays.deepToString;
 
 public abstract class AbstractLicenseMojo extends AbstractMojo {
 
+  /** The static default keywords. */
   private static final String[] DEFAULT_KEYWORDS = {"copyright"};
 
+  /** The license sets. */
   @Parameter(property = "license.licenseSets", alias = "licenseSets")
   public LicenseSet[] licenseSets;
 
@@ -409,6 +411,7 @@ public abstract class AbstractLicenseMojo extends AbstractMojo {
   @Inject
   protected ProjectBuilder projectBuilder;
 
+  /** The session. */
   @Parameter(defaultValue = "${session}")
   public MavenSession session;
 
@@ -805,18 +808,36 @@ public abstract class AbstractLicenseMojo extends AbstractMojo {
     return ex.toArray(new String[ex.size()]);
   }
 
+  /**
+   * Info.
+   *
+   * @param format the format
+   * @param params the params
+   */
   public final void info(String format, Object... params) {
     if (!quiet && getLog().isInfoEnabled()) {
       getLog().info(format(format, params));
     }
   }
 
+  /**
+   * Debug.
+   *
+   * @param format the format
+   * @param params the params
+   */
   public final void debug(String format, Object... params) {
     if (!quiet && getLog().isDebugEnabled()) {
       getLog().debug(format(format, params));
     }
   }
 
+  /**
+   * Warn.
+   *
+   * @param format the format
+   * @param params the params
+   */
   public final void warn(String format, Object... params) {
     if (!quiet && getLog().isWarnEnabled()) {
       getLog().warn(format(format, params));
@@ -894,11 +915,10 @@ public abstract class AbstractLicenseMojo extends AbstractMojo {
   }
 
   /**
-   * Retrieves the credentials for the given server or null if none could be
-   * found.
+   * Retrieves the credentials for the given server or null if none could be found.
    *
-   * @param serverID
-   * @return
+   * @param serverID the server ID
+   * @return the credentials
    */
   public Credentials findCredentials(String serverID) {
     if (serverID == null) {
