@@ -19,10 +19,29 @@ import com.mycila.maven.plugin.license.document.Document;
 import com.mycila.maven.plugin.license.header.Header;
 
 public interface Callback {
+
+  /**
+   * On header not found.
+   *
+   * @param document the document
+   * @param header the header
+   */
   void onHeaderNotFound(Document document, Header header);
 
+  /**
+   * On existing header.
+   *
+   * @param document the document
+   * @param header the header
+   */
   void onExistingHeader(Document document, Header header);
 
+  /**
+   * On unknown file.
+   *
+   * @param document the document
+   * @param header the header
+   */
   void onUnknownFile(Document document, Header header);
 
 }
