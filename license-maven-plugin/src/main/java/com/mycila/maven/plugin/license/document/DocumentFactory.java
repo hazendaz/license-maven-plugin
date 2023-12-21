@@ -30,6 +30,16 @@ public final class DocumentFactory {
   private final String[] keywords;
   private final DocumentPropertiesLoader documentPropertiesLoader;
 
+  /**
+   * Instantiates a new document factory.
+   *
+   * @param basedir the basedir
+   * @param mapping the mapping
+   * @param definitions the definitions
+   * @param encoding the encoding
+   * @param keywords the keywords
+   * @param documentPropertiesLoader the document properties loader
+   */
   public DocumentFactory(final File basedir, final Map<String, String> mapping, final Map<String, HeaderDefinition> definitions, final Charset encoding, final String[] keywords, final DocumentPropertiesLoader documentPropertiesLoader) {
     this.mapping = mapping;
     this.definitions = definitions;
@@ -39,6 +49,12 @@ public final class DocumentFactory {
     this.documentPropertiesLoader = documentPropertiesLoader;
   }
 
+  /**
+   * Creates a new Document object.
+   *
+   * @param file the file
+   * @return the document
+   */
   public Document createDocuments(final String file) {
     return getWrapper(file);
   }

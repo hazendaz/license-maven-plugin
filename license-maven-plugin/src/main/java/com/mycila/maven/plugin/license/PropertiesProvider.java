@@ -21,19 +21,37 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
+ * The Interface PropertiesProvider.
  */
 public interface PropertiesProvider extends AutoCloseable {
 
+  /**
+   * Inits the.
+   *
+   * @param mojo the mojo
+   * @param currentProperties the current properties
+   */
   default void init(AbstractLicenseMojo mojo, Map<String, String> currentProperties) {
       // Do nothing on default
   }
 
+  /**
+   * Adjust properties.
+   *
+   * @param mojo the mojo
+   * @param currentProperties the current properties
+   * @param document the document
+   * @return the map
+   */
   default Map<String, String> adjustProperties(AbstractLicenseMojo mojo,
                                                Map<String, String> currentProperties, Document document) {
     // Return empty collection on default
     return Collections.emptyMap();
   }
 
+  /**
+   * Close.
+   */
   @Override
   default void close() {
       // Do nothing on default

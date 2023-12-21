@@ -18,6 +18,9 @@ package com.mycila.maven.plugin.license;
 import com.mycila.maven.plugin.license.header.HeaderDefinition;
 import org.apache.maven.plugins.annotations.Parameter;
 
+/**
+ * The Class HeaderStyle.
+ */
 public class HeaderStyle {
 
   /** The name of this header style. */
@@ -91,6 +94,11 @@ public class HeaderStyle {
   @Parameter(required = true)
   public String lastLineDetectionPattern;
 
+  /**
+   * To header definition.
+   *
+   * @return the header definition
+   */
   public HeaderDefinition toHeaderDefinition() {
     return new HeaderDefinition(name, firstLine, beforeEachLine, endLine, afterEachLine, skipLinePattern, firstLineDetectionPattern, lastLineDetectionPattern, allowBlankLines, multiLine, padLines);
   }

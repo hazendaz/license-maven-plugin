@@ -38,6 +38,11 @@ public class AggregateLicensePolicyEnforcer {
   private LicensePolicyEnforcer defaultPolicy;
   private Set<LicensePolicyEnforcer> enforcers;
 
+  /**
+   * Instantiates a new aggregate license policy enforcer.
+   *
+   * @param policies the policies
+   */
   public AggregateLicensePolicyEnforcer(final Set<LicensePolicy> policies) {
     this.policies = policies;
     this.defaultPolicy = new DefaultLicensePolicyEnforcer();
@@ -156,22 +161,47 @@ public class AggregateLicensePolicyEnforcer {
     return apply(licenseMap.getLicenseMap());
   }
 
+  /**
+   * Sets the enforcers.
+   *
+   * @param enforcers the new enforcers
+   */
   public void setEnforcers(final Set<LicensePolicyEnforcer> enforcers) {
     this.enforcers = enforcers;
   }
 
+  /**
+   * Gets the enforcers.
+   *
+   * @return the enforcers
+   */
   public Set<LicensePolicyEnforcer> getEnforcers() {
     return enforcers;
   }
 
+  /**
+   * Gets the policies.
+   *
+   * @return the policies
+   */
   public Set<LicensePolicy> getPolicies() {
     return policies;
   }
 
+  /**
+   * Gets the default policy.
+   *
+   * @return the default policy
+   */
   public LicensePolicyEnforcer<?> getDefaultPolicy() {
     return defaultPolicy;
   }
 
+  /**
+   * Sets the default policy.
+   *
+   * @param defaultPolicy the new default policy
+   */
   public void setDefaultPolicy(final LicensePolicyEnforcer defaultPolicy) {
     this.defaultPolicy = defaultPolicy;
   }

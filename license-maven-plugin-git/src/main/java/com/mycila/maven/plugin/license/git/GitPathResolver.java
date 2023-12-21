@@ -36,6 +36,11 @@ public class GitPathResolver {
    */
   private final String repositoryRootDir;
 
+  /**
+   * Instantiates a new git path resolver.
+   *
+   * @param repositoryRootDir the repository root dir
+   */
   public GitPathResolver(String repositoryRootDir) {
     this(repositoryRootDir, File.separatorChar);
   }

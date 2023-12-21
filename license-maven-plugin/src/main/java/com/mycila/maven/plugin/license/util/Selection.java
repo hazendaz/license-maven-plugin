@@ -38,6 +38,15 @@ public final class Selection {
 
   private DirectoryScanner scanner;
 
+  /**
+   * Instantiates a new selection.
+   *
+   * @param basedir the basedir
+   * @param included the included
+   * @param excluded the excluded
+   * @param useDefaultExcludes the use default excludes
+   * @param log the log
+   */
   public Selection(File basedir, String[] included, String[] excluded, boolean useDefaultExcludes,
                    final Log log) {
     this.basedir = basedir;
@@ -48,6 +57,11 @@ public final class Selection {
     this.excluded = buildExclusions(useDefaultExcludes, excluded, overrides);
   }
 
+  /**
+   * Gets the selected files.
+   *
+   * @return the selected files
+   */
   public String[] getSelectedFiles() {
     scanIfneeded();
     return scanner.getIncludedFiles();
@@ -58,14 +72,29 @@ public final class Selection {
     return scanner;
   }
 
+  /**
+   * Gets the basedir.
+   *
+   * @return the basedir
+   */
   public File getBasedir() {
     return basedir;
   }
 
+  /**
+   * Gets the included.
+   *
+   * @return the included
+   */
   public String[] getIncluded() {
     return included;
   }
 
+  /**
+   * Gets the excluded.
+   *
+   * @return the excluded
+   */
   public String[] getExcluded() {
     return excluded;
   }
