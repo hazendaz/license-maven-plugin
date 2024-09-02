@@ -675,7 +675,7 @@ public abstract class AbstractLicenseMojo extends AbstractMojo {
           buildHeaderDefinitions(licenseSet, finder), Charset.forName(encoding), licenseSet.keywords,
           perDocumentProperties);
 
-      CompletionService<?> completionService = new ExecutorCompletionService<>(executorService);
+      CompletionService<Object> completionService = new ExecutorCompletionService<>(executorService);
       int count = 0;
       debug("Number of execution threads: %s", threads);
 
