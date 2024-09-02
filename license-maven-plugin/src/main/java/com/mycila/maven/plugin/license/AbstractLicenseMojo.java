@@ -707,7 +707,7 @@ public abstract class AbstractLicenseMojo extends AbstractMojo {
         count++;
       }
 
-      while (count-- > 0) {
+      for (int i = count; i > 0; i--) {
         try {
           completionService.take().get();
         } catch (InterruptedException e) {
