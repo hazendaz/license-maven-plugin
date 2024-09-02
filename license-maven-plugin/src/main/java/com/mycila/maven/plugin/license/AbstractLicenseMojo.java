@@ -707,6 +707,7 @@ public abstract class AbstractLicenseMojo extends AbstractMojo {
         count++;
       }
 
+      System.out.println("Processing this many files..." + count);
       for (int i = count; i > 0; i--) {
         try {
           completionService.take().get();
@@ -728,6 +729,7 @@ public abstract class AbstractLicenseMojo extends AbstractMojo {
           }
           throw new RuntimeException(cause.getMessage(), cause);
         }
+        System.out.println("File left..." + i);
       }
 
     } finally {
@@ -745,6 +747,7 @@ public abstract class AbstractLicenseMojo extends AbstractMojo {
   }
 
   private int getNumberOfExecutorThreads() {
+    System.out.println("Number of processors: " + Runtime.getRuntime().availableProcessors());
     return nThreads > 0 ?
         nThreads :
         Math.max(1, (int) (Runtime.getRuntime().availableProcessors() * concurrencyFactor));
