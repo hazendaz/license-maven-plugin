@@ -29,16 +29,18 @@ import java.nio.charset.Charset;
 import static com.mycila.maven.plugin.license.util.FileUtils.readFirstLines;
 import static com.mycila.maven.plugin.license.util.FileUtils.remove;
 
+import com.google.common.hash.Hashing;
+
 public final class Document {
   private final File file;
   private final String filePath;
+  private final String originalFileHash;
   private final HeaderDefinition headerDefinition;
   private final Charset encoding;
   private final String[] keywords;
   private final DocumentPropertiesLoader documentPropertiesLoader;
   private final PropertyPlaceholderResolver placeholderResolver = new PropertyPlaceholderResolver();
   private HeaderParser parser;
-
 
   public Document(File file, HeaderDefinition headerDefinition, Charset encoding, String[] keywords, DocumentPropertiesLoader documentPropertiesLoader) {
     this.keywords = keywords.clone();
@@ -47,6 +49,7 @@ public final class Document {
     this.headerDefinition = headerDefinition;
     this.encoding = encoding;
     this.documentPropertiesLoader = documentPropertiesLoader;
+    this.originalFileHash = this.sha512hash(this.readFileAsString(file));
   }
 
   public HeaderDefinition getHeaderDefinition() {
@@ -102,10 +105,14 @@ public final class Document {
 
   public void saveTo(File dest) {
     if (parser != null) {
-      try {
-        FileUtils.write(dest, parser.getFileContent().getContent(), encoding);
-      } catch (IOException e) {
-        throw new IllegalStateException("Cannot write new header in file " + filePath + ". Cause: " + e.getMessage(), e);
+      String formattedFileHash = this.sha512hash(parser.getFileContent().getContent());
+      System.out.println("old hash " + this.originalFileHash + " and formatted hash " + formattedFileHash);
+      if (this.originalFileHash != formattedFileHash) {
+        try {
+          FileUtils.write(dest, parser.getFileContent().getContent(), encoding);
+        } catch (IOException e) {
+          throw new IllegalStateException("Cannot write new header in file " + filePath + ". Cause: " + e.getMessage(), e);
+        }
       }
     }
   }
@@ -142,4 +149,17 @@ public final class Document {
   public String toString() {
     return "Document " + filePath;
   }
+
+  private String sha512hash(final String str) {
+      return Hashing.sha512().hashBytes(str.getBytes(encoding)).toString();
+  }
+
+  private String readFileAsString(final File file) {
+      try {
+        return FileUtils.read(file, encoding);
+      } catch (IOException e) {
+          throw new IllegalStateException("Cannot calculate file hash " + filePath + ". Cause: " + e.getMessage(), e);
+      }
+  }
+
 }
