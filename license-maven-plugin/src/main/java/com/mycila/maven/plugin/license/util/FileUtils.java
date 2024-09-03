@@ -19,7 +19,6 @@ import org.apache.commons.io.IOUtils;
 import org.codehaus.plexus.util.InterpolationFilterReader;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -30,7 +29,6 @@ import java.io.UncheckedIOException;
 import java.net.URL;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -77,13 +75,8 @@ public final class FileUtils {
     return results;
   }
 
-  @SuppressWarnings("resource")
   public static String read(File file, Charset encoding) throws IOException {
-    try (FileChannel in = new FileInputStream(file).getChannel()) {
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      in.transferTo(0, in.size(), Channels.newChannel(baos));
-      return baos.toString(encoding.name());
-    }
+    return new String(Files.readAllBytes(file.toPath()), encoding);
   }
 
   public static String readFirstLines(File file, int lineCount, Charset encoding) throws IOException {
