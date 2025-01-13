@@ -115,11 +115,7 @@ public final class FileUtils {
   }
 
   public static Path asPath(final File file) {
-    if (file == null) {
-      return null;
-    }
-
-    return file.toPath();
+    return file == null ? null : file.toPath();
   }
 
   @SuppressWarnings({"ConstantConditions", "ResultOfMethodCallIgnored"})
