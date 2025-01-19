@@ -57,7 +57,7 @@ class UseDefaultMappingMojoTest {
     } catch (MojoExecutionException e) {
       Assertions.assertTrue(logger.getContent().contains("header style: text"));
       String absoluteDockerfileName = new File("src/test/resources/check/Dockerfile").getCanonicalPath().replace('\\', '/');
-      Assertions.assertTrue(logger.getContent().contains("Header OK in: " + absoluteDockerfileName));
+      Assertions.assertTrue(logger.getContent().contains("Header OK in: " + absoluteDockerfileName), logger.getContent());
       Assertions.assertEquals("Some files do not have the expected license header. Run license:format to update them.", e.getMessage());
     }
   }
