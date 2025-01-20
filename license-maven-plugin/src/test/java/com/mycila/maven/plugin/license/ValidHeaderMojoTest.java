@@ -15,12 +15,12 @@
  */
 package com.mycila.maven.plugin.license;
 
+import java.nio.file.Path;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.io.File;
 
 class ValidHeaderMojoTest {
   @Test
@@ -32,7 +32,7 @@ class ValidHeaderMojoTest {
         format.execute();*/
 
     LicenseCheckMojo check = new LicenseCheckMojo();
-    check.defaultBasedir = new File("src/test/resources/check/valid");
+    check.defaultBasedir = Path.of("src/test/resources/check/valid").toFile();
     check.legacyConfigHeader = "src/test/resources/test-header1.txt";
     check.project = new MavenProjectStub();
     check.strictCheck = true;

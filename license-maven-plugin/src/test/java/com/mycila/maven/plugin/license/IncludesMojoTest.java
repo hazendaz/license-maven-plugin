@@ -15,19 +15,19 @@
  */
 package com.mycila.maven.plugin.license;
 
+import java.nio.file.Path;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.io.File;
 
 class IncludesMojoTest {
 
   @Test
   void test_include() throws Exception {
     LicenseCheckMojo check = new LicenseCheckMojo();
-    check.defaultBasedir = new File("src/test/resources/check");
+    check.defaultBasedir = Path.of("src/test/resources/check").toFile();
     check.legacyConfigHeader = "header.txt";
     check.project = new MavenProjectStub();
     check.legacyConfigIncludes = new String[]{"inexisting"};
@@ -38,7 +38,7 @@ class IncludesMojoTest {
   @Test
   void test_include_and_fail() throws Exception {
     LicenseCheckMojo check = new LicenseCheckMojo();
-    check.defaultBasedir = new File("src/test/resources/check");
+    check.defaultBasedir = Path.of("src/test/resources/check").toFile();
     check.legacyConfigHeader = "header.txt";
     check.project = new MavenProjectStub();
     check.legacyConfigIncludes = new String[]{"doc1.txt"};
@@ -51,7 +51,7 @@ class IncludesMojoTest {
   @Test
   void test_include_overrides_default_exclusion() throws Exception {
     LicenseCheckMojo check = new LicenseCheckMojo();
-    check.defaultBasedir = new File("src/test/resources/issues/issue-71");
+    check.defaultBasedir = Path.of("src/test/resources/issues/issue-71").toFile();
     check.legacyConfigHeader = "../../check/header.txt";
     check.project = new MavenProjectStub();
     check.legacyConfigIncludes = new String[]{"**/.travis.yml"};

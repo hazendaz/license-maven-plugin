@@ -24,10 +24,10 @@ import org.junit.jupiter.api.io.TempDir;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Calendar;
@@ -60,9 +60,9 @@ class GitLookupTest {
         String fileName = entry.getName();
         Path unzippedFile = unzipDestination.resolve(fileName);
         if (entry.isDirectory()) {
-          unzippedFile.toFile().mkdirs();
+          Files.createDirectories(unzippedFile);
         } else {
-          unzippedFile.toFile().getParentFile().mkdirs();
+            Files.createDirectories(unzippedFile.getParent());
           try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(unzippedFile), 2048)) {
             int len;
             while ((len = zipInputStream.read(buffer)) != -1) {
@@ -164,18 +164,18 @@ class GitLookupTest {
   void timezone() throws GitAPIException, IOException {
     // do not fail if a tz is./mv  set, it will just be unused
     // it allows parent poms to pre-defined properties and let sub modules use them if needed
-    try (GitLookup gitLookup = GitLookup.create(gitRepoRoot.toFile(), buildProps(DateSource.AUTHOR, "GMT", "10", null))) {
+    try (GitLookup gitLookup = GitLookup.create(gitRepoRoot, buildProps(DateSource.AUTHOR, "GMT", "10", null))) {
       // do nothing
     }
 
     /* null is GMT */
-    try (GitLookup nullTzLookup = GitLookup.create(gitRepoRoot.toFile(),
+    try (GitLookup nullTzLookup = GitLookup.create(gitRepoRoot,
         buildProps(DateSource.COMMITER, null, "10", null))) {
       assertLastChange(nullTzLookup, "dir1/file3.txt", 2010);
     }
 
     /* explicit GMT */
-    try (GitLookup gmtLookup = GitLookup.create(gitRepoRoot.toFile(),
+    try (GitLookup gmtLookup = GitLookup.create(gitRepoRoot,
         buildProps(DateSource.COMMITER, "GMT", "10", null))) {
       assertLastChange(gmtLookup, "dir1/file3.txt", 2010);
     }
@@ -184,7 +184,7 @@ class GitLookupTest {
      * explicit non-GMT zome. Note that the relevant commit's (GMT) time stamp is 2010-12-31T23:30:00 which yealds
      * 2011 in the CET (+01:00) time zone
      */
-    try (GitLookup cetLookup = GitLookup.create(gitRepoRoot.toFile(),
+    try (GitLookup cetLookup = GitLookup.create(gitRepoRoot,
         buildProps(DateSource.COMMITER, "CET", "10", null))) {
       assertLastChange(cetLookup, "dir1/file3.txt", 2011);
     }
@@ -210,12 +210,12 @@ class GitLookupTest {
 
   // Make sure to close after call
   private GitLookup newAuthorLookup() {
-    return GitLookup.create(gitRepoRoot.toFile(), buildProps(DateSource.AUTHOR, null, "10", null));
+    return GitLookup.create(gitRepoRoot, buildProps(DateSource.AUTHOR, null, "10", null));
   }
 
   // Make sure to close after call
   private GitLookup newCommitterLookup() {
-    return GitLookup.create(gitRepoRoot.toFile(), buildProps(DateSource.COMMITER, null, "10", null));
+    return GitLookup.create(gitRepoRoot, buildProps(DateSource.COMMITER, null, "10", null));
   }
 
   @Test
@@ -240,24 +240,24 @@ class GitLookupTest {
   // Make sure to close after call
   private GitLookup newAuthorLookup(String... commitsToIgnore) throws IOException {
     String commitsToIgnoreCSV = String.join(",", commitsToIgnore);
-    return GitLookup.create(gitRepoRoot.toFile(), buildProps(DateSource.AUTHOR, null, "10", commitsToIgnoreCSV));
+    return GitLookup.create(gitRepoRoot, buildProps(DateSource.AUTHOR, null, "10", commitsToIgnoreCSV));
   }
 
   // Make sure to close after call
   private GitLookup newCommitterLookup(String... commitsToIgnore) throws IOException {
     String commitsToIgnoreCSV = String.join(",", commitsToIgnore);
-    return GitLookup.create(gitRepoRoot.toFile(), buildProps(DateSource.COMMITER, null, "10", commitsToIgnoreCSV));
+    return GitLookup.create(gitRepoRoot, buildProps(DateSource.COMMITER, null, "10", commitsToIgnoreCSV));
   }
 
   private void assertLastChange(GitLookup provider, String relativePath, int expected) throws
       GitAPIException, IOException {
-    int actual = provider.getYearOfLastChange(gitRepoRoot.resolve(relativePath.replace('/', File.separatorChar)).toFile());
+    int actual = provider.getYearOfLastChange(gitRepoRoot.resolve(relativePath.replace('/', FileSystems.getDefault().getSeparator().charAt(0))));
     Assertions.assertEquals(expected, actual);
   }
 
   private void assertCreation(GitLookup provider, String relativePath, int expected) throws
       GitAPIException, IOException {
-    int actual = provider.getYearOfCreation(gitRepoRoot.resolve(relativePath.replace('/', File.separatorChar)).toFile());
+    int actual = provider.getYearOfCreation(gitRepoRoot.resolve(relativePath.replace('/', FileSystems.getDefault().getSeparator().charAt(0))));
     Assertions.assertEquals(expected, actual);
   }
 

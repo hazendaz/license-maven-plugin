@@ -21,14 +21,14 @@ import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.Collections;
 
 class AdditionalHeaderMojoTest {
   @Test
   void test_additionalHeaderDefinitions() throws Exception {
     LicenseCheckMojo check = new LicenseCheckMojo();
-    check.defaultBasedir = new File("src/test/resources/check/def");
+    check.defaultBasedir = Path.of("src/test/resources/check/def").toFile();
     check.legacyConfigHeader = "src/test/resources/check/header.txt";
     check.project = new MavenProjectStub();
     check.legacyConfigExcludes = new String[]{"*.xml"};
@@ -48,7 +48,7 @@ class AdditionalHeaderMojoTest {
   @Test
   void test_inline() throws Exception {
     LicenseCheckMojo check = new LicenseCheckMojo();
-    check.defaultBasedir = new File("src/test/resources/check/def");
+    check.defaultBasedir = Path.of("src/test/resources/check/def").toFile();
     check.legacyConfigHeader = "src/test/resources/check/header.txt";
     check.project = new MavenProjectStub();
     check.legacyConfigExcludes = new String[]{"*.xml"};

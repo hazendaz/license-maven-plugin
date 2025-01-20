@@ -22,7 +22,7 @@ import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -33,7 +33,7 @@ class MappingMojoTest {
     LicenseCheckMojo check = new LicenseCheckMojo();
     MockedLog logger = new MockedLog();
     check.setLog(new DefaultLog(logger));
-    check.defaultBasedir = new File("src/test/resources/check");
+    check.defaultBasedir = Path.of("src/test/resources/check").toFile();
     check.legacyConfigHeader = "header.txt";
     check.project = new MavenProjectStub();
     check.useDefaultMapping = true;
@@ -70,7 +70,7 @@ class MappingMojoTest {
     MockedLog logger = new MockedLog();
     check.setLog(new DefaultLog(logger));
     //check.setLog(new SystemStreamLog());
-    check.defaultBasedir = new File("src/test/resources/check");
+    check.defaultBasedir = Path.of("src/test/resources/check").toFile();
     check.legacyConfigHeader = "header.txt";
     check.project = new MavenProjectStub();
     check.legacyConfigIncludes = new String[]{"test.apt.vm"};
@@ -101,7 +101,7 @@ class MappingMojoTest {
     MockedLog logger = new MockedLog();
     check.setLog(new DefaultLog(logger));
     //check.setLog(new SystemStreamLog());
-    check.defaultBasedir = new File("src/test/resources/check/issue107");
+    check.defaultBasedir = Path.of("src/test/resources/check/issue107").toFile();
     check.legacyConfigHeader = "header.txt";
     check.project = new MavenProjectStub();
     check.legacyConfigIncludes = new String[]{"test.xml.tmpl"};
@@ -127,7 +127,7 @@ class MappingMojoTest {
     MockedLog logger = new MockedLog();
     check.setLog(new DefaultLog(logger));
     //check.setLog(new SystemStreamLog());
-    check.defaultBasedir = new File("src/test/resources/extensionless");
+    check.defaultBasedir = Path.of("src/test/resources/extensionless").toFile();
     check.legacyConfigHeader = "header.txt";
     check.project = new MavenProjectStub();
     check.legacyConfigIncludes = new String[]{"extensionless-file"};
@@ -142,7 +142,7 @@ class MappingMojoTest {
     /* Add the mapping and expect the missing header */
     MockedLog mappedLogger = new MockedLog();
     check.setLog(new DefaultLog(mappedLogger));
-    check.mapping = new LinkedHashMap<String, String>() {{
+    check.mapping = new LinkedHashMap<>() {{
       put("extensionless-file", "SCRIPT_STYLE");
     }};
 
@@ -164,7 +164,7 @@ class MappingMojoTest {
     MockedLog logger = new MockedLog();
     check.setLog(new DefaultLog(logger));
     //check.setLog(new SystemStreamLog());
-    check.defaultBasedir = new File("src/test/resources/unknown");
+    check.defaultBasedir = Path.of("src/test/resources/unknown").toFile();
     check.legacyConfigHeader = "header.txt";
     check.project = new MavenProjectStub();
     check.legacyConfigIncludes = new String[]{"file.unknown"};

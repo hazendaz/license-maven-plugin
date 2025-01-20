@@ -86,6 +86,10 @@ public final class FileUtils {
     }
   }
 
+  public static String read(Path path, Charset encoding) throws IOException {
+      return read(path.toFile(), encoding);
+  }
+
   public static String readFirstLines(File file, int lineCount, Charset encoding) throws IOException {
     try (BufferedReader reader = Files.newBufferedReader(file.toPath(), encoding)) {
       String line;
@@ -96,6 +100,10 @@ public final class FileUtils {
       }
       return sb.toString();
     }
+  }
+
+  public static String readFirstLines(Path path, int lineCount, Charset encoding) throws IOException {
+      return readFirstLines(path.toFile(), lineCount, encoding);
   }
 
   public static String remove(String str, String... chars) {
@@ -112,6 +120,10 @@ public final class FileUtils {
          FileChannel outChannel = new FileOutputStream(dest).getChannel()) {
       inChannel.transferTo(0, inChannel.size(), outChannel);
     }
+  }
+
+  public static void copyFileToFolder(Path path, Path folder) throws IOException {
+      copyFileToFolder(path.toFile(), folder.toFile());
   }
 
   public static Path asPath(final File file) {

@@ -16,16 +16,16 @@
 package com.mycila.maven.plugin.license;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.io.Files;
 import com.mycila.maven.plugin.license.util.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -37,62 +37,62 @@ class UpdateMojoTest {
 
   @Test
   void test_update() throws Exception {
-    File tmp = new File("target/test/update");
-    tmp.mkdirs();
-    FileUtils.copyFileToFolder(new File("src/test/resources/update/doc1.txt"), tmp);
-    FileUtils.copyFileToFolder(new File("src/test/resources/update/doc2.txt"), tmp);
+    Path tmp = Path.of("target/test/update");
+    Files.createDirectories(tmp);
+    FileUtils.copyFileToFolder(Path.of("src/test/resources/update/doc1.txt"), tmp);
+    FileUtils.copyFileToFolder(Path.of("src/test/resources/update/doc2.txt"), tmp);
 
     LicenseFormatMojo updater = new LicenseFormatMojo();
-    updater.defaultBasedir = tmp;
+    updater.defaultBasedir = tmp.toFile();
     updater.legacyConfigHeader = "src/test/resources/update/header.txt";
     updater.project = new MavenProjectStub();
     updater.defaultProperties = ImmutableMap.of("year", "2008");
     updater.execute();
 
-    Assertions.assertEquals(FileUtils.read(new File(tmp, "doc1.txt"), Charset.defaultCharset()), "====\r\n    My @Copyright license 2 with my-custom-value and 2008 and doc1.txt\r\n====\r\n\r\nsome data\r\n");
-    Assertions.assertEquals(FileUtils.read(new File(tmp, "doc2.txt"), Charset.defaultCharset()), "====\r\n    My @Copyright license 2 with my-custom-value and 2008 and doc2.txt\r\n====\r\n\r\nsome data\r\n");
+    Assertions.assertEquals(FileUtils.read(Path.of(tmp.toString(), "doc1.txt"), Charset.defaultCharset()), "====\r\n    My @Copyright license 2 with my-custom-value and 2008 and doc1.txt\r\n====\r\n\r\nsome data\r\n");
+    Assertions.assertEquals(FileUtils.read(Path.of(tmp.toString(), "doc2.txt"), Charset.defaultCharset()), "====\r\n    My @Copyright license 2 with my-custom-value and 2008 and doc2.txt\r\n====\r\n\r\nsome data\r\n");
   }
 
   @Test
   void test_update_inlineHeader() throws Exception {
-    File tmp = new File("target/test/update-inlineHeader");
-    tmp.mkdirs();
-    FileUtils.copyFileToFolder(new File("src/test/resources/update/doc1.txt"), tmp);
-    FileUtils.copyFileToFolder(new File("src/test/resources/update/doc2.txt"), tmp);
+    Path tmp = Path.of("target/test/update-inlineHeader");
+    Files.createDirectories(tmp);
+    FileUtils.copyFileToFolder(Path.of("src/test/resources/update/doc1.txt"), tmp);
+    FileUtils.copyFileToFolder(Path.of("src/test/resources/update/doc2.txt"), tmp);
 
     LicenseFormatMojo updater = new LicenseFormatMojo();
-    updater.defaultBasedir = tmp;
-    updater.legacyConfigInlineHeader = FileUtils.read(new File("src/test/resources/update/header.txt"), StandardCharsets.UTF_8);
+    updater.defaultBasedir = tmp.toFile();
+    updater.legacyConfigInlineHeader = FileUtils.read(Path.of("src/test/resources/update/header.txt"), StandardCharsets.UTF_8);
     updater.project = new MavenProjectStub();
     updater.defaultProperties = ImmutableMap.of("year", "2008");
     updater.execute();
 
-    Assertions.assertEquals("====\r\n    My @Copyright license 2 with my-custom-value and 2008 and doc1.txt\r\n====\r\n\r\nsome data\r\n", FileUtils.read(new File(tmp, "doc1.txt"), Charset.defaultCharset()));
-    Assertions.assertEquals("====\r\n    My @Copyright license 2 with my-custom-value and 2008 and doc2.txt\r\n====\r\n\r\nsome data\r\n", FileUtils.read(new File(tmp, "doc2.txt"), Charset.defaultCharset()));
+    Assertions.assertEquals("====\r\n    My @Copyright license 2 with my-custom-value and 2008 and doc1.txt\r\n====\r\n\r\nsome data\r\n", FileUtils.read(Path.of(tmp.toString(), "doc1.txt"), Charset.defaultCharset()));
+    Assertions.assertEquals("====\r\n    My @Copyright license 2 with my-custom-value and 2008 and doc2.txt\r\n====\r\n\r\nsome data\r\n", FileUtils.read(Path.of(tmp.toString(), "doc2.txt"), Charset.defaultCharset()));
   }
 
   @Test
   void test_skipExistingHeaders() throws Exception {
-    File tmp = new File("target/test/test_skipExistingHeaders");
-    tmp.mkdirs();
-    FileUtils.copyFileToFolder(new File("src/test/resources/update/doc1.txt"), tmp);
-    FileUtils.copyFileToFolder(new File("src/test/resources/update/doc2.txt"), tmp);
+    Path tmp = Path.of("target/test/test_skipExistingHeaders");
+    Files.createDirectories(tmp);
+    FileUtils.copyFileToFolder(Path.of("src/test/resources/update/doc1.txt"), tmp);
+    FileUtils.copyFileToFolder(Path.of("src/test/resources/update/doc2.txt"), tmp);
 
     // only update those files without a copyright header
     LicenseFormatMojo updater = new LicenseFormatMojo();
-    updater.defaultBasedir = tmp;
+    updater.defaultBasedir = tmp.toFile();
     updater.legacyConfigHeader = "src/test/resources/update/header.txt";
     updater.project = new MavenProjectStub();
     updater.defaultProperties = ImmutableMap.of("year", "2008");
     updater.skipExistingHeaders = true;
     updater.execute();
 
-    Assertions.assertEquals("====\r\n    My @Copyright license 2 with my-custom-value and 2008 and doc1.txt\r\n====\r\n\r\nsome data\r\n", FileUtils.read(new File(tmp, "doc1.txt"), Charset.defaultCharset()));
-    Assertions.assertEquals("====\r\n    Copyright license\r\n====\r\n\r\nsome data\r\n", FileUtils.read(new File(tmp, "doc2.txt"), Charset.defaultCharset()));
+    Assertions.assertEquals("====\r\n    My @Copyright license 2 with my-custom-value and 2008 and doc1.txt\r\n====\r\n\r\nsome data\r\n", FileUtils.read(Path.of(tmp.toString(), "doc1.txt"), Charset.defaultCharset()));
+    Assertions.assertEquals("====\r\n    Copyright license\r\n====\r\n\r\nsome data\r\n", FileUtils.read(Path.of(tmp.toString(), "doc2.txt"), Charset.defaultCharset()));
 
     // expect unchanged header to fail check against new header
     LicenseCheckMojo check = new LicenseCheckMojo();
-    check.defaultBasedir = tmp;
+    check.defaultBasedir = tmp.toFile();
     check.legacyConfigHeader = "src/test/resources/update/header.txt";
     check.project = new MavenProjectStub();
     check.defaultProperties = ImmutableMap.of("year", "2008");
@@ -113,14 +113,14 @@ class UpdateMojoTest {
 
   @Test
   void test_issue50() throws Exception {
-    File tmp = new File("target/test/update/issue50");
-    tmp.mkdirs();
-    FileUtils.copyFileToFolder(new File("src/test/resources/update/issue50/test1.properties"), tmp);
-    FileUtils.copyFileToFolder(new File("src/test/resources/update/issue50/test2.properties"), tmp);
-    FileUtils.copyFileToFolder(new File("src/test/resources/update/issue50/test3.properties"), tmp);
+    Path tmp = Path.of("target/test/update/issue50");
+    Files.createDirectories(tmp);
+    FileUtils.copyFileToFolder(Path.of("src/test/resources/update/issue50/test1.properties"), tmp);
+    FileUtils.copyFileToFolder(Path.of("src/test/resources/update/issue50/test2.properties"), tmp);
+    FileUtils.copyFileToFolder(Path.of("src/test/resources/update/issue50/test3.properties"), tmp);
 
     LicenseFormatMojo updater = new LicenseFormatMojo();
-    updater.defaultBasedir = tmp;
+    updater.defaultBasedir = tmp.toFile();
     updater.legacyConfigHeader = "src/test/resources/update/header.txt";
     updater.defaultProperties = ImmutableMap.of("year", "2008");
     updater.mapping = new LinkedHashMap<>() {{
@@ -129,9 +129,9 @@ class UpdateMojoTest {
     updater.project = new MavenProjectStub();
     updater.execute();
 
-    String test1 = FileUtils.read(new File(tmp, "test1.properties"), Charset.defaultCharset()).replaceAll("\\n", LS);
-    String test2 = FileUtils.read(new File(tmp, "test2.properties"), Charset.defaultCharset());
-    String test3 = FileUtils.read(new File(tmp, "test3.properties"), Charset.defaultCharset());
+    String test1 = FileUtils.read(Path.of(tmp.toString(), "test1.properties"), Charset.defaultCharset()).replaceAll("\\n", LS);
+    String test2 = FileUtils.read(Path.of(tmp.toString(), "test2.properties"), Charset.defaultCharset());
+    String test3 = FileUtils.read(Path.of(tmp.toString(), "test3.properties"), Charset.defaultCharset());
 
     Assertions.assertEquals(test1, test2.replace("test2.properties", "test1.properties"));
     Assertions.assertEquals(test1, test3.replace("test3.properties", "test1.properties"));
@@ -139,13 +139,13 @@ class UpdateMojoTest {
 
   @Test
   void test_issue48() throws Exception {
-    File tmp = new File("target/test/update/issue48");
-    tmp.mkdirs();
-    FileUtils.copyFileToFolder(new File("src/test/resources/update/issue48/test1.php"), tmp);
-    FileUtils.copyFileToFolder(new File("src/test/resources/update/issue48/test2.php"), tmp);
+    Path tmp = Path.of("target/test/update/issue48");
+    Files.createDirectories(tmp);
+    FileUtils.copyFileToFolder(Path.of("src/test/resources/update/issue48/test1.php"), tmp);
+    FileUtils.copyFileToFolder(Path.of("src/test/resources/update/issue48/test2.php"), tmp);
 
     LicenseFormatMojo updater = new LicenseFormatMojo();
-    updater.defaultBasedir = tmp;
+    updater.defaultBasedir = tmp.toFile();
     updater.legacyConfigHeader = "src/test/resources/update/header.txt";
     updater.defaultProperties = ImmutableMap.of("year", "2008");
     updater.mapping = new LinkedHashMap<>() {{
@@ -154,7 +154,7 @@ class UpdateMojoTest {
     updater.project = new MavenProjectStub();
     updater.execute();
 
-    Assertions.assertEquals(FileUtils.read(new File(tmp, "test1.php"), Charset.defaultCharset()), "\r\n" +
+    Assertions.assertEquals(FileUtils.read(Path.of(tmp.toString(), "test1.php"), Charset.defaultCharset()), "\r\n" +
         "\r\n" +
         "<?php\r\n" +
         "/*\r\n" +
@@ -164,7 +164,7 @@ class UpdateMojoTest {
         "class Conference extends Service {}\r\n" +
         "\r\n" +
         "?>\r\n");
-    Assertions.assertEquals(FileUtils.read(new File(tmp, "test2.php"), Charset.defaultCharset()), "\r\n" +
+    Assertions.assertEquals(FileUtils.read(Path.of(tmp.toString(), "test2.php"), Charset.defaultCharset()), "\r\n" +
         "\r\n" +
         "<?php\r\n" +
         "/*\r\n" +
@@ -178,40 +178,40 @@ class UpdateMojoTest {
 
   @Test
   void test_issue44() throws Exception {
-    File tmp = new File("target/test/update/issue44");
-    tmp.mkdirs();
-    FileUtils.copyFileToFolder(new File("src/test/resources/update/issue44/issue44-3.rb"), tmp);
-    FileUtils.copyFileToFolder(new File("src/test/resources/update/issue44/test.asp"), tmp);
+    Path tmp = Path.of("target/test/update/issue44");
+    Files.createDirectories(tmp);
+    FileUtils.copyFileToFolder(Path.of("src/test/resources/update/issue44/issue44-3.rb"), tmp);
+    FileUtils.copyFileToFolder(Path.of("src/test/resources/update/issue44/test.asp"), tmp);
 
     LicenseFormatMojo updater = new LicenseFormatMojo();
-    updater.defaultBasedir = tmp;
+    updater.defaultBasedir = tmp.toFile();
     updater.legacyConfigHeader = "src/test/resources/update/header.txt";
     updater.defaultProperties = ImmutableMap.of("year", "2008");
     updater.project = new MavenProjectStub();
     updater.execute();
 
-    Assertions.assertEquals(FileUtils.read(new File(tmp, "issue44-3.rb"), Charset.defaultCharset()), "#" + LS + "" +
+    Assertions.assertEquals(FileUtils.read(Path.of(tmp.toString(), "issue44-3.rb"), Charset.defaultCharset()), "#" + LS + "" +
         "# My @Copyright license 2 with my-custom-value and 2008 and issue44-3.rb" + LS + "" +
         "#" + LS + "" +
         "" + LS + "" +
         "# code comment" + LS + "" +
         "ruby code here" + LS + "");
 
-    Assertions.assertEquals("<%\n" +
+    Assertions.assertEquals(FileUtils.read(tmp.resolve("test.asp"), Charset.defaultCharset()), "<%\n" +
         "' My @Copyright license 2 with my-custom-value and 2008 and test.asp\n" +
         "%>" +
         "\n" +
-        "asp code", FileUtils.read(new File(tmp, "test.asp"), Charset.defaultCharset()).trim());
+        "asp code");
   }
 
   @Test
   void test_issue_14() throws Exception {
-    File tmp = new File("target/test/update/issue14");
-    tmp.mkdirs();
-    FileUtils.copyFileToFolder(new File("src/test/resources/update/issue14/test.properties"), tmp);
+    Path tmp = Path.of("target/test/update/issue14");
+    Files.createDirectories(tmp);
+    FileUtils.copyFileToFolder(Path.of("src/test/resources/update/issue14/test.properties"), tmp);
 
     LicenseFormatMojo updater = new LicenseFormatMojo();
-    updater.defaultBasedir = tmp;
+    updater.defaultBasedir = tmp.toFile();
     updater.legacyConfigHeader = "src/test/resources/update/issue14/header.txt";
     updater.project = new MavenProjectStub();
     updater.execute();
@@ -237,19 +237,19 @@ class UpdateMojoTest {
         "seq.nodes=SELECT nextval('seq_nodes')" + LS + "" +
         "seq.triples=SELECT nextval('seq_triples')" + LS + "" +
         "seq.namespaces=SELECT nextval('seq_namespaces')" + LS + "";
-    final String readModifiedContent = FileUtils.read(new File(tmp, "test.properties"), Charset.defaultCharset());
+    final String readModifiedContent = FileUtils.read(Path.of(tmp.toString(), "test.properties"), Charset.defaultCharset());
 
     Assertions.assertEquals(expectedString, readModifiedContent);
   }
 
   @Test
   void test_issue71_canSkipSeveralLines() throws Exception {
-    File tmp = new File("target/test/update/issue71");
-    tmp.mkdirs();
-    FileUtils.copyFileToFolder(new File("src/test/resources/issues/issue-71/issue-71.txt.extended"), tmp);
+    Path tmp = Path.of("target/test/update/issue71");
+    Files.createDirectories(tmp);
+    FileUtils.copyFileToFolder(Path.of("src/test/resources/issues/issue-71/issue-71.txt.extended"), tmp);
 
     LicenseFormatMojo updater = new LicenseFormatMojo();
-    updater.defaultBasedir = tmp;
+    updater.defaultBasedir = tmp.toFile();
     updater.legacyConfigHeader = "src/test/resources/issues/issue-71/issue-71-header.txt";
     updater.project = new MavenProjectStub();
     updater.mapping = new LinkedHashMap<>() {{
@@ -260,50 +260,50 @@ class UpdateMojoTest {
 
 
     // Check that all the skipable header has been correctly skipped
-    List<String> linesOfModifiedFile = Files.readLines(new File(tmp, "issue-71.txt.extended"), Charset.defaultCharset());
+    List<String> linesOfModifiedFile = Files.readAllLines(Path.of(tmp.toString(), "issue-71.txt.extended"), Charset.defaultCharset());
     assertThat(linesOfModifiedFile.get(0) /* line 1 */).isEqualTo("|||");
     assertThat(linesOfModifiedFile.get(8) /* line 9 */).isEqualTo("|||");
   }
 
   @Test
   void test_issue37_RunningUpdaterTwiceMustNotChangeTheFile() throws Exception {
-    File tmp = new File("target/test/update/issue37");
-    tmp.mkdirs();
-    FileUtils.copyFileToFolder(new File("src/test/resources/update/issue37/xwiki.xml"), tmp);
+    Path tmp = Path.of("target/test/update/issue37");
+    Files.createDirectories(tmp);
+    FileUtils.copyFileToFolder(Path.of("src/test/resources/update/issue37/xwiki.xml"), tmp);
 
     LicenseFormatMojo execution1 = new LicenseFormatMojo();
-    execution1.defaultBasedir = tmp;
+    execution1.defaultBasedir = tmp.toFile();
     execution1.legacyConfigHeader = "src/test/resources/update/issue37/xwiki-license.txt";
     execution1.project = new MavenProjectStub();
     execution1.execute();
 
-    String execution1FileContent = FileUtils.read(new File(tmp, "xwiki.xml"), Charset.defaultCharset());
+    String execution1FileContent = FileUtils.read(Path.of(tmp.toString(), "xwiki.xml"), Charset.defaultCharset());
 
     LicenseFormatMojo execution2 = new LicenseFormatMojo();
-    execution2.defaultBasedir = tmp;
+    execution2.defaultBasedir = tmp.toFile();
     execution2.legacyConfigHeader = "src/test/resources/update/issue37/xwiki-license.txt";
     execution2.project = new MavenProjectStub();
     execution2.execute();
 
-    String execution2FileContent = FileUtils.read(new File(tmp, "xwiki.xml"), Charset.defaultCharset());
+    String execution2FileContent = FileUtils.read(Path.of(tmp.toString(), "xwiki.xml"), Charset.defaultCharset());
 
     assertThat(execution1FileContent).isEqualTo(execution2FileContent);
   }
 
   @Test
   void test_UpdateWorksHasExpectedOnAOneLineCommentFile_relatesTo_issue30() throws Exception {
-    File tmp = new File("target/test/update/issue30");
-    tmp.mkdirs();
-    FileUtils.copyFileToFolder(new File("src/test/resources/update/issue30/one-line-comment.ftl"), tmp);
+    Path tmp = Path.of("target/test/update/issue30");
+    Files.createDirectories(tmp);
+    FileUtils.copyFileToFolder(Path.of("src/test/resources/update/issue30/one-line-comment.ftl"), tmp);
 
     LicenseFormatMojo updater = new LicenseFormatMojo();
-    updater.defaultBasedir = tmp;
+    updater.defaultBasedir = tmp.toFile();
     updater.legacyConfigHeader = "src/test/resources/single-line-header.txt";
     updater.project = new MavenProjectStub();
     updater.execute();
 
-    List<String> linesOfOriginFile = Files.readLines(new File("src/test/resources/update/issue30/one-line-comment.ftl"), Charset.defaultCharset());
-    List<String> linesOfUpdatedFile = Files.readLines(new File(tmp, "one-line-comment.ftl"), Charset.defaultCharset());
+    List<String> linesOfOriginFile = Files.readAllLines(Path.of("src/test/resources/update/issue30/one-line-comment.ftl"), Charset.defaultCharset());
+    List<String> linesOfUpdatedFile = Files.readAllLines(Path.of(tmp.toString(), "one-line-comment.ftl"), Charset.defaultCharset());
 
     // check that the original line is kept as the latest one even when introducing a license header
     assertThat(linesOfOriginFile.get(0)).isEqualTo(linesOfUpdatedFile.get(linesOfUpdatedFile.size() - 1));
@@ -315,15 +315,15 @@ class UpdateMojoTest {
    * Checks that xml with --> on the same line does not become corrupted when license is already correct
    */
   void test_issue213() throws Exception {
-    File tmp = new File("target/test/update/issue213");
-    tmp.mkdirs();
-    FileUtils.copyFileToFolder(new File("src/test/resources/update/issue213/test.xml"), tmp);
+    Path tmp = Path.of("target/test/update/issue213");
+    Files.createDirectories(tmp);
+    FileUtils.copyFileToFolder(Path.of("src/test/resources/update/issue213/test.xml"), tmp);
 
     LicenseFormatMojo updater = new LicenseFormatMojo();
-    updater.defaultBasedir = tmp;
+    updater.defaultBasedir = tmp.toFile();
 
     LicenseSet licenseSet = new LicenseSet();
-    licenseSet.basedir = tmp;
+    licenseSet.basedir = tmp.toFile();
     licenseSet.inlineHeader = "All content copyright (c) 2003-2021 Bla, Inc., except as may\n" +
         "  otherwise be noted in a separate copyright notice. All rights reserved.";
     updater.licenseSets = new LicenseSet[]{licenseSet};
@@ -342,18 +342,18 @@ class UpdateMojoTest {
             "<top>\n" +
             "  <element>value</element>\n" +
             "</top>\n",
-        FileUtils.read(new File(tmp, "test.xml"), Charset.defaultCharset())
+        FileUtils.read(Path.of(tmp.toString(), "test.xml"), Charset.defaultCharset())
     );
   }
 
   @Test
   void test_issue71_underscore_in_package_name() throws Exception {
-    File tmp = new File("target/test/update/issue-187");
-    tmp.mkdirs();
-    FileUtils.copyFileToFolder(new File("src/test/resources/update/issue-187/Main.java"), tmp);
+    Path tmp = Path.of("target/test/update/issue-187");
+    Files.createDirectories(tmp);
+    FileUtils.copyFileToFolder(Path.of("src/test/resources/update/issue-187/Main.java"), tmp);
 
     LicenseFormatMojo updater = new LicenseFormatMojo();
-    updater.defaultBasedir = tmp;
+    updater.defaultBasedir = tmp.toFile();
     updater.legacyConfigHeader = "src/test/resources/update/issue-187/header.txt";
     updater.project = new MavenProjectStub();
     updater.mapping = new LinkedHashMap<>() {{
@@ -362,8 +362,8 @@ class UpdateMojoTest {
 
     updater.execute();
 
-    String processed = FileUtils.read(new File(tmp, "Main.java"), Charset.defaultCharset());
-    String expected = FileUtils.read(new File("src/test/resources/update/issue-187/expected.txt"), Charset.defaultCharset());
+    String processed = FileUtils.read(Path.of(tmp.toString(), "Main.java"), Charset.defaultCharset());
+    String expected = FileUtils.read(Path.of("src/test/resources/update/issue-187/expected.txt"), Charset.defaultCharset());
 
     assertThat(processed).isEqualTo(expected);
   }
