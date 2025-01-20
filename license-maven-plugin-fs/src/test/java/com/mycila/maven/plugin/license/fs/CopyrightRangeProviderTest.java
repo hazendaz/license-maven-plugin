@@ -22,9 +22,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
@@ -77,14 +77,14 @@ class CopyrightRangeProviderTest {
   }
 
   private static Document newDocument(String relativePath) {
-    Path path = Path.of(fsRepoRoot + File.separator
-        + relativePath.replace('/', File.separatorChar));
-    return new Document(path.toFile(), null, StandardCharsets.UTF_8, new String[0], null);
+    Path path = Path.of(fsRepoRoot + FileSystems.getDefault().getSeparator()
+        + relativePath.replace('/', FileSystems.getDefault().getSeparator().charAt(0)));
+    return new Document(path, null, StandardCharsets.UTF_8, new String[0], null);
   }
 
   @BeforeAll
   static void beforeClass() throws IOException {
-    fsRepoRoot = Path.of(tempFolder + File.separator + "fs-test-repo");
+    fsRepoRoot = Path.of(tempFolder + FileSystems.getDefault().getSeparator() + "fs-test-repo");
 
     Files.createDirectories(fsRepoRoot.resolve("dir1"));
     Files.createFile(fsRepoRoot.resolve("dir1/file1.txt"));

@@ -16,6 +16,7 @@
 package com.mycila.maven.plugin.license.git;
 
 import java.io.File;
+import java.nio.file.FileSystems;
 
 /**
  * A utility to transform native {@link File} paths to the form expected by jGit - i.e. relative to git working tree
@@ -37,7 +38,7 @@ public class GitPathResolver {
   private final String repositoryRootDir;
 
   public GitPathResolver(String repositoryRootDir) {
-    this(repositoryRootDir, File.separatorChar);
+    this(repositoryRootDir, FileSystems.getDefault().getSeparator().charAt(0));
   }
 
   /**

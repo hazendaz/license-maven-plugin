@@ -20,7 +20,7 @@ import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,7 +34,7 @@ class AggregateMojoTest {
       }
     };
     LicenseCheckMojo check = new LicenseCheckMojo();
-    check.defaultBasedir = new File("src/test/resources/check/modules");
+    check.defaultBasedir = Path.of("src/test/resources/check/modules").toFile();
     check.legacyConfigHeader = "header.txt";
     check.project = project;
     check.strictCheck = true;
@@ -51,7 +51,7 @@ class AggregateMojoTest {
     };
     LicenseCheckMojo check = new LicenseCheckMojo();
     check.project = project;
-    check.defaultBasedir = new File("src/test/resources/check/modules");
+    check.defaultBasedir = Path.of("src/test/resources/check/modules").toFile();
     check.legacyConfigHeader = "header.txt";
     check.aggregate = true;
     check.strictCheck = true;
