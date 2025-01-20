@@ -15,7 +15,7 @@
  */
 package com.mycila.maven.plugin.license;
 
-import java.io.File;
+import java.nio.file.Path;
 
 import org.apache.maven.monitor.logging.DefaultLog;
 import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
@@ -29,7 +29,7 @@ class QuietMojoTest {
   @Disabled("Unstable test to fix: https://github.com/mathieucarbou/license-maven-plugin/issues/834")
   void test_load_header_from_relative_file() throws Exception {
     LicenseCheckMojo check = new LicenseCheckMojo();
-    check.defaultBasedir = new File("src/test/resources/check");
+    check.defaultBasedir = Path.of("src/test/resources/check").toFile();
     check.legacyConfigHeader = "header.txt";
     check.project = new MavenProjectStub();
     check.failIfMissing = false;

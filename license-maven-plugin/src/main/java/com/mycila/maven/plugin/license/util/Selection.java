@@ -21,6 +21,7 @@ import org.apache.maven.shared.utils.io.DirectoryScanner;
 import org.apache.maven.shared.utils.io.MatchPatterns;
 import org.apache.maven.shared.utils.io.ScanConductor;
 
+import java.nio.file.FileSystems;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -112,7 +113,7 @@ public final class Selection {
   }
 
   private boolean isFolderExclusion(final String exclude) {
-    return exclude.endsWith(File.separator + "**");
+    return exclude.endsWith(FileSystems.getDefault().getSeparator() + "**");
   }
 
   private static String[] buildExclusions(boolean useDefaultExcludes, String[] excludes, String[] overrides) {

@@ -15,12 +15,12 @@
  */
 package com.mycila.maven.plugin.license;
 
+import java.nio.file.Path;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.io.File;
 
 class StrictTest {
 
@@ -36,7 +36,7 @@ class StrictTest {
 
     // all the headers are by default checked not strictlty
     LicenseCheckMojo check = new LicenseCheckMojo();
-    check.defaultBasedir = new File("src/test/resources/check/issue76");
+    check.defaultBasedir = Path.of("src/test/resources/check/issue76").toFile();
     check.legacyConfigHeader = "src/test/resources/test-header1.txt";
     check.project = project;
     check.strictCheck = false;
@@ -65,7 +65,7 @@ class StrictTest {
 
     // all the headers are by default checked not strictlty
     LicenseCheckMojo check = new LicenseCheckMojo();
-    check.defaultBasedir = new File("src/test/resources/check/strict");
+    check.defaultBasedir = Path.of("src/test/resources/check/strict").toFile();
     check.legacyConfigHeader = "src/test/resources/test-header1-diff.txt";
     check.project = project;
     check.execute();

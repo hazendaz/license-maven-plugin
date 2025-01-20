@@ -19,7 +19,7 @@ import com.mycila.maven.plugin.license.AbstractLicenseMojo;
 import com.mycila.maven.plugin.license.PropertiesProvider;
 import com.mycila.maven.plugin.license.document.Document;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.HashMap;
@@ -69,7 +69,7 @@ public class CopyrightRangeProvider implements PropertiesProvider {
     try {
       Map<String, String> result = new HashMap<>(4);
 
-      int copyrightEnd = getYearOfLastChange(document.getFile());
+      int copyrightEnd = getYearOfLastChange(document.getFile().toPath());
       result.put(COPYRIGHT_LAST_YEAR_KEY, Integer.toString(copyrightEnd));
       final String copyrightYears;
       if (inceptionYearInt >= copyrightEnd) {
@@ -87,8 +87,8 @@ public class CopyrightRangeProvider implements PropertiesProvider {
     }
   }
 
-  private static int getYearOfLastChange(File file) {
-    return Instant.ofEpochMilli(file.lastModified()).atOffset(UTC).getYear();
+  private static int getYearOfLastChange(Path path) {
+    return Instant.ofEpochMilli(path.toFile().lastModified()).atOffset(UTC).getYear();
   }
 
 }

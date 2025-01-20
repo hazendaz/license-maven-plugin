@@ -15,19 +15,19 @@
  */
 package com.mycila.maven.plugin.license;
 
+import java.nio.file.Path;
+
 import org.apache.maven.monitor.logging.DefaultLog;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-
 class UseDefaultMappingMojoTest {
   @Test
   void test_not_useDefaultMapping() throws Exception {
     LicenseCheckMojo check = new LicenseCheckMojo();
-    check.defaultBasedir = new File("src/test/resources/check");
+    check.defaultBasedir = Path.of("src/test/resources/check").toFile();
     check.legacyConfigHeader = "header.txt";
     check.project = new MavenProjectStub();
     check.useDefaultMapping = false;
@@ -37,14 +37,14 @@ class UseDefaultMappingMojoTest {
     check.execute();
     Assertions.assertFalse(logger.getContent().contains("header style: text"));
     Assertions.assertTrue(logger.getContent().contains("header style: unknown"));
-    String absoluteFileName = new File("src/test/resources/check/doc1.txt").getCanonicalPath().replace('\\', '/');
+    String absoluteFileName = Path.of("src/test/resources/check/doc1.txt").toFile().getCanonicalPath().replace('\\', '/');
     Assertions.assertTrue(logger.getContent().contains("Unknown file extension: " + absoluteFileName));
   }
 
   @Test
   void test_useDefaultMapping() throws Exception {
     LicenseCheckMojo check = new LicenseCheckMojo();
-    check.defaultBasedir = new File("src/test/resources/check");
+    check.defaultBasedir = Path.of("src/test/resources/check").toFile();
     check.legacyConfigHeader = "header.txt";
     check.project = new MavenProjectStub();
     check.useDefaultMapping = true;
@@ -56,7 +56,7 @@ class UseDefaultMappingMojoTest {
       Assertions.fail();
     } catch (MojoExecutionException e) {
       Assertions.assertTrue(logger.getContent().contains("header style: text"));
-      String absoluteDockerfileName = new File("src/test/resources/check/Dockerfile").getCanonicalPath().replace('\\', '/');
+      String absoluteDockerfileName = Path.of("src/test/resources/check/Dockerfile").toFile().getCanonicalPath().replace('\\', '/');
       Assertions.assertTrue(logger.getContent().contains("Header OK in: " + absoluteDockerfileName));
       Assertions.assertEquals("Some files do not have the expected license header. Run license:format to update them.", e.getMessage());
     }

@@ -22,10 +22,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,8 +61,8 @@ class CopyrightAuthorProviderTest {
   }
 
   private static Document newDocument(String relativePath) {
-    Path path = gitRepoRoot.resolve(relativePath.replace('/', File.separatorChar));
-    return new Document(path.toFile(), null, StandardCharsets.UTF_8, new String[0], null);
+    Path path = gitRepoRoot.resolve(relativePath.replace('/', FileSystems.getDefault().getSeparator().charAt(0)));
+    return new Document(path, null, StandardCharsets.UTF_8, new String[0], null);
   }
 
   @BeforeAll

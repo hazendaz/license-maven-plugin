@@ -19,11 +19,11 @@ import com.mycila.maven.plugin.license.header.Header;
 import com.mycila.maven.plugin.license.header.HeaderSource.UrlHeaderSource;
 import com.mycila.maven.plugin.license.util.FileUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -50,13 +50,13 @@ class DocumentTest {
 
   @BeforeAll
   static void setup() throws IOException, URISyntaxException {
-    header = new Header(new UrlHeaderSource(new File("src/test/resources/test-header1.txt").toURI().toURL(), StandardCharsets.UTF_8), null);
+    header = new Header(new UrlHeaderSource(Path.of("src/test/resources/test-header1.txt").toFile().toURI().toURL(), StandardCharsets.UTF_8), null);
   }
 
   @Test
   void test_create() throws Exception {
     Document doc = new Document(
-        new File("src/test/resources/doc/doc1.txt"),
+        Path.of("src/test/resources/doc/doc1.txt"),
         DocumentType.TXT.getDefaultHeaderType().getDefinition(),
         Charset.defaultCharset(), new String[]{"copyright"},
         loader);
@@ -67,7 +67,7 @@ class DocumentTest {
   @Test
   void test_unsupported() throws Exception {
     Document doc = new Document(
-        new File("src/test/resources/doc/doc1.txt"),
+        Path.of("src/test/resources/doc/doc1.txt"),
         DocumentType.UNKNOWN.getDefaultHeaderType().getDefinition(),
         Charset.defaultCharset(), new String[]{"copyright"},
         loader);
@@ -78,7 +78,7 @@ class DocumentTest {
   @Test
   void test_hasHeader() throws Exception {
     Document doc = new Document(
-        new File("src/test/resources/doc/doc1.txt"),
+        Path.of("src/test/resources/doc/doc1.txt"),
         DocumentType.TXT.getDefaultHeaderType().getDefinition(),
         Charset.defaultCharset(), new String[]{"copyright"},
         loader);
@@ -88,14 +88,14 @@ class DocumentTest {
   @Test
   void test_isHeader() throws Exception {
     Document doc = new Document(
-        new File("src/test/resources/doc/doc1.txt"),
+        Path.of("src/test/resources/doc/doc1.txt"),
         DocumentType.TXT.getDefaultHeaderType().getDefinition(),
         Charset.defaultCharset(), new String[]{"copyright"},
         loader);
     Assertions.assertFalse(doc.is(header));
 
     doc = new Document(
-        new File("src/test/resources/test-header1.txt"),
+        Path.of("src/test/resources/test-header1.txt"),
         DocumentType.TXT.getDefaultHeaderType().getDefinition(),
         Charset.defaultCharset(), new String[]{"copyright"},
         loader);
@@ -105,20 +105,20 @@ class DocumentTest {
   @Test
   void test_remove_header1() throws Exception {
     Document doc = new Document(
-        new File("src/test/resources/doc/doc1.txt"),
+        Path.of("src/test/resources/doc/doc1.txt"),
         DocumentType.TXT.getDefaultHeaderType().getDefinition(),
         Charset.defaultCharset(), new String[]{"copyright"},
         loader);
     doc.parseHeader();
     doc.removeHeader();
     Assertions.assertEquals(doc.getContent(),
-        FileUtils.read(new File("src/test/resources/doc/doc1.txt"), Charset.defaultCharset()));
+        FileUtils.read(Path.of("src/test/resources/doc/doc1.txt"), Charset.defaultCharset()));
   }
 
   @Test
   void test_remove_header2() throws Exception {
     Document doc = new Document(
-        new File("src/test/resources/doc/doc2.txt"),
+        Path.of("src/test/resources/doc/doc2.txt"),
         DocumentType.TXT.getDefaultHeaderType().getDefinition(),
         Charset.defaultCharset(), new String[]{"copyright"},
         loader);
@@ -130,7 +130,7 @@ class DocumentTest {
   @Test
   void test_remove_header3() throws Exception {
     Document doc = new Document(
-        new File("src/test/resources/doc/doc3.txt"),
+        Path.of("src/test/resources/doc/doc3.txt"),
         DocumentType.TXT.getDefaultHeaderType().getDefinition(),
         Charset.defaultCharset(), new String[]{"copyright"},
         loader);
@@ -143,7 +143,7 @@ class DocumentTest {
   @MethodSource("parameters")
   void test_remove_header_xml(String document, String content) throws Exception {
     Document doc = new Document(
-        new File(document),
+        Path.of(document),
         DocumentType.XML.getDefaultHeaderType().getDefinition(),
         Charset.defaultCharset(), new String[]{"copyright"},
         loader);
@@ -164,7 +164,7 @@ class DocumentTest {
   @Test
   void test_remove_header_xml_4() throws Exception {
     Document doc = new Document(
-        new File("src/test/resources/doc/doc8.xml"),
+        Path.of("src/test/resources/doc/doc8.xml"),
         DocumentType.XML.getDefaultHeaderType().getDefinition(),
         Charset.defaultCharset(), new String[]{"copyright"},
         loader);
@@ -176,7 +176,7 @@ class DocumentTest {
   @Test
   void test_remove_header_xml_5() throws Exception {
     Document doc = new Document(
-        new File("src/test/resources/doc/doc9.xml"),
+        Path.of("src/test/resources/doc/doc9.xml"),
         DocumentType.XML.getDefaultHeaderType().getDefinition(),
         Charset.defaultCharset(), new String[]{"copyright"},
         loader);

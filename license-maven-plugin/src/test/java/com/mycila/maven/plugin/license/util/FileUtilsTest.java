@@ -18,11 +18,11 @@ package com.mycila.maven.plugin.license.util;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.HashMap;
 
 class FileUtilsTest {
@@ -47,7 +47,7 @@ class FileUtilsTest {
 
   @Test
   void test_read_first_lines() throws Exception {
-    String s = FileUtils.readFirstLines(new File("src/test/data/compileCP/test2.txt"), 3, StandardCharsets.ISO_8859_1);
+    String s = FileUtils.readFirstLines(Path.of("src/test/data/compileCP/test2.txt"), 3, StandardCharsets.ISO_8859_1);
     Assertions.assertTrue(s.contains("c"));
     Assertions.assertFalse(s.contains("d"));
   }

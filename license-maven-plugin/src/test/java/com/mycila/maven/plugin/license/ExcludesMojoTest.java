@@ -15,19 +15,19 @@
  */
 package com.mycila.maven.plugin.license;
 
+import java.nio.file.Path;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.io.File;
 
 class ExcludesMojoTest {
 
   @Test
   void test_no_exclusions() throws Exception {
     LicenseCheckMojo check = new LicenseCheckMojo();
-    check.defaultBasedir = new File("src/test/resources/check");
+    check.defaultBasedir = Path.of("src/test/resources/check").toFile();
     check.legacyConfigHeader = "header.txt";
     check.project = new MavenProjectStub();
     check.legacyConfigExcludes = new String[0];
@@ -40,7 +40,7 @@ class ExcludesMojoTest {
   @Test
   void test_exclusions() throws Exception {
     LicenseCheckMojo check = new LicenseCheckMojo();
-    check.defaultBasedir = new File("src/test/resources/check");
+    check.defaultBasedir = Path.of("src/test/resources/check").toFile();
     check.legacyConfigHeader = "header.txt";
     check.project = new MavenProjectStub();
     check.legacyConfigExcludes = new String[]{"**/*.txt", "**/*.xml", "**/*.java", "**/*.apt.vm"};

@@ -37,6 +37,7 @@ import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -119,6 +120,10 @@ public class GitLookup implements AutoCloseable {
     return new GitLookup(file, dateSource, timeZone, checkCommitsCount, commitsToIgnore);
   }
 
+  public static GitLookup create(Path path, Map<String, String> props) {
+      return create(path.toFile(), props);
+  }
+
   /**
    * Creates a new {@link GitLookup} for a repository that is detected from the supplied {@code
    * anyFile}.
@@ -194,6 +199,10 @@ public class GitLookup implements AutoCloseable {
     return commitYear;
   }
 
+  int getYearOfLastChange(Path path) throws GitAPIException, IOException {
+      return getYearOfLastChange(path.toFile());
+  }
+
   /**
    * Returns the year of creation for the given {@code file} based on the history of the present git branch. The
    * year is taken either from the committer date or from the author identity depending on how {@link #dateSource} was
@@ -217,6 +226,10 @@ public class GitLookup implements AutoCloseable {
     }
 
     return commitYear;
+  }
+
+  int getYearOfCreation(Path path) throws IOException {
+      return getYearOfCreation(path.toFile());
   }
 
   String getAuthorNameOfCreation(File file) throws IOException {

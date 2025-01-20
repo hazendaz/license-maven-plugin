@@ -22,9 +22,9 @@ import com.mycila.xmltool.XMLTag;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 
 class AdditionalHeaderDefinitionTest {
   @Test
@@ -51,7 +51,7 @@ class AdditionalHeaderDefinitionTest {
 
     //FileUtils.write(new File("src/test/resources/test-header3.txt"), header.buildForDefinition(loader.getDefinitions().get("xquery")));
 
-    final String content = FileUtils.read(new File("src/test/resources/test-header3.txt"), Charset.defaultCharset());
+    final String content = FileUtils.read(Path.of("src/test/resources/test-header3.txt"), Charset.defaultCharset());
     Assertions.assertEquals(header.buildForDefinition(loader.getDefinitions().get("xquery"), content.indexOf("\n") == -1),
         content);
   }
@@ -95,7 +95,7 @@ class AdditionalHeaderDefinitionTest {
 
     //FileUtils.write(new File("src/test/resources/test-header4.txt"), header.buildForDefinition(loader.getDefinitions().get("csregion"), false), Charset.defaultCharset());
 
-    final String content = FileUtils.read(new File("src/test/resources/test-header4.txt"), Charset.defaultCharset());
+    final String content = FileUtils.read(Path.of("src/test/resources/test-header4.txt"), Charset.defaultCharset());
     Assertions.assertEquals(header.buildForDefinition(loader.getDefinitions().get("csregion"), content.indexOf("\n") == -1),
         content);
   }

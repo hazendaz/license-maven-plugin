@@ -16,12 +16,14 @@
 package com.mycila.maven.plugin.license;
 
 import com.mycila.maven.plugin.license.util.FileUtils;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.io.File;
 
 class CheckTest {
 
@@ -37,7 +39,7 @@ class CheckTest {
     MavenProjectStub project = new MavenProjectStub();
 
     LicenseCheckMojo check = new LicenseCheckMojo();
-    check.defaultBasedir = new File("src/test/resources/check/linewrap");
+    check.defaultBasedir = Path.of("src/test/resources/check/linewrap").toFile();
     check.legacyConfigHeader = "header.txt";
     check.project = project;
 
@@ -54,12 +56,12 @@ class CheckTest {
     }
 
     // prepare to reformat the file
-    File tmp = new File("target/test/linewrap");
-    tmp.mkdirs();
-    FileUtils.copyFileToFolder(new File("src/test/resources/check/linewrap/testconfig.xml"), tmp);
+    Path tmp = Path.of("target/test/linewrap");
+    Files.createDirectories(tmp);
+    FileUtils.copyFileToFolder(Path.of("src/test/resources/check/linewrap/testconfig.xml"), tmp);
 
     LicenseFormatMojo updater = new LicenseFormatMojo();
-    updater.defaultBasedir = tmp;
+    updater.defaultBasedir = tmp.toFile();
     updater.legacyConfigHeader = "src/test/resources/check/linewrap/header.txt";
     updater.project = project;
     updater.strictCheck = true;
@@ -67,7 +69,7 @@ class CheckTest {
 
     // the check again, strictly. should work now
     check = new LicenseCheckMojo();
-    check.defaultBasedir = tmp;
+    check.defaultBasedir = tmp.toFile();
     check.legacyConfigHeader = "src/test/resources/check/linewrap/header.txt";
     check.project = project;
 
